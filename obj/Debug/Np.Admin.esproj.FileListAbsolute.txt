@@ -1,0 +1,2 @@
+D:\source\repos\gjtales\gjtales\Np.Admin\obj\Debug\Np.Admin.esproj.SuggestedBindingRedirects.cache
+D:\source\repos\gjtales\gjtales\Np.Admin\obj\Debug\Np.Admin.esproj.CoreCompileInputs.cache

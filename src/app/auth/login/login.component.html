@@ -1,0 +1,210 @@
+<!-- Authentication section -->
+<div class="row auth mx-0">
+  <!-- Left column for authentication -->
+  <div class="col-12 col-md-6">
+    <div class="auth-body">
+      <!-- Authentication content -->
+      <div *ngIf="!isTwoFactorEmailSent"
+           class="row justify-content-center align-items-center h-100">
+        <div class="col-12 col-lg-8 col-xxl-6">
+          <div class="p-3">
+            <!-- Night mode toggle button -->
+            <div class="d-flex justify-content-end mb-5">
+              <button (click)="app.SwitchNightMode()"
+                      id="nightModeBtn"
+                      class="btn btn-icon-one">
+                <i class="fa fa-moon"></i>
+              </button>
+              <!--<button (click)="showLanguageModal()"
+                      type="button"
+                      class="btn btn-icon-one ms-2">
+                <i class="fa fa-globe"></i>
+              </button>-->
+            </div>
+            <!-- Logo -->
+            <div class="mb-3">
+              <a href="/">
+                <img [src]="'/api/media/generalimage/'+app.GetAppConfig('logo')"
+                     alt="Logo"
+                     class="auth-brand">
+              </a>
+            </div>
+            <!-- Login title and description -->
+            <h2>
+              {{app.Localize("Login")}}
+            </h2>
+            <p class="text-muted mb-4">
+              {{app.Localize("Login Description")}}
+            </p>
+            <!-- Login form -->
+            <div class="row gy-3">
+              <form #frm="ngForm"
+                    [ngClass]="{'was-validated' : isFormValidated}"
+                    (ngSubmit)="submitForm(frm)"
+                    id="frm"
+                    novalidate>
+                <!-- Email or Username input -->
+                <div class="form-group">
+                  <label for="email">
+                    {{app.Localize('Email Or Username')}}
+                  </label>
+                  <input ngModel
+                         id="email"
+                         type="text"
+                         class="form-control"
+                         name="email"
+                         tabindex="1"
+                         required
+                         autofocus>
+                  <div class="invalid-feedback">
+                    {{app.Localize('Please enter email or username.')}}
+                  </div>
+                </div>
+                <!-- Password input -->
+                <div class="form-group">
+                  <div class="d-flex justify-content-between">
+                    <label for="password"
+                           class="control-label">
+                      {{app.Localize('Password')}}
+                    </label>
+                    <div class="ms-auto">
+                      <a [routerLink]="['/auth/forgotpassword']">
+                        {{app.Localize('Forgot Password?')}}
+                      </a>
+                    </div>
+                  </div>
+                  <input ngModel
+                         id="password"
+                         type="password"
+                         class="form-control"
+                         name="password"
+                         required
+                         tabindex="2">
+                  <div class="invalid-feedback">
+                    {{app.Localize('Please enter password.')}}
+                  </div>
+                </div>
+                <!-- Remember Me checkbox -->
+                <div class="form-check form-switch">
+                  <input ngModel
+                         type="checkbox"
+                         name="isRemember"
+                         class="form-check-input"
+                         id="isRemember"
+                         tabindex="3">
+                  <label class="form-check-label ms-2"
+                         for="isRemember">
+                    {{app.Localize('Remember Me')}}
+                  </label>
+                </div>
+                <!-- Login button -->
+                <div class="form-group">
+                  <button [ngClass]="{'disabled btn-progress' : isFormSubmitted}"
+                          type="submit"
+                          class="btn btn-primary btn-lg w-100"
+                          tabindex="4">
+                    {{app.Localize('Login')}}
+                  </button>
+                </div>
+              </form>
+            </div>
+            <!-- Copyright text -->
+            <div class="text-center">
+              <p class="text-muted mt-4">
+                {{app.GetAppConfig("copyright")}}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="isTwoFactorEmailSent"
+           class="row justify-content-center align-items-center h-100">
+        <div class="col-12 col-lg-8 col-xxl-6">
+          <div class="p-3">
+            <!-- Navigation buttons -->
+            <div class="d-flex justify-content-between mb-5">
+              <!-- Back button -->
+              <button (click)="resetPage()"
+                      type="button"
+                      class="back-btn">
+                {{app.Localize("Back")}}
+              </button>
+              <!-- Night mode toggle button -->
+              <button (click)="app.SwitchNightMode()"
+                      id="nightModeBtn"
+                      class="btn btn-icon-one">
+                <i class="fa fa-moon"></i>
+              </button>
+            </div>
+            <!-- Logo -->
+            <div class="mb-4">
+              <a href="/">
+                <img [src]="'/api/media/generalimage/'+app.GetAppConfig('logo')"
+                     alt="Logo"
+                     class="auth-brand">
+              </a>
+            </div>
+            <div>
+              <h2>
+                {{app.Localize("Two-factor Authentication")}}
+              </h2>
+              <p class="text-muted mb-3">
+                {{app.Localize("Two-factor Authentication Description")}}
+              </p>
+            </div>
+            <!-- form -->
+            <div class="row gy-3">
+              <form #frm="ngForm"
+                    [ngClass]="{'was-validated' : isFormValidated}"
+                    (ngSubmit)="submitForm1(frm)"
+                    id="frm"
+                    novalidate>
+                <!-- PassCode input -->
+                <div class="form-group">
+                  <label for="passCode">
+                    {{app.Localize('Pass Code')}}
+                  </label>
+                  <input ngModel
+                         id="passCode"
+                         type="text"
+                         class="form-control"
+                         name="passCode"
+                         tabindex="1"
+                         required
+                         autofocus>
+                  <div class="invalid-feedback">
+                    {{app.Localize('Please enter pass code.')}}
+                  </div>
+                </div>
+                <!-- Login button -->
+                <div class="form-group">
+                  <button [ngClass]="{'disabled btn-progress' : isFormSubmitted}"
+                          type="submit"
+                          class="btn btn-primary btn-lg w-100"
+                          tabindex="4">
+                    {{app.Localize('Login')}}
+                  </button>
+                </div>
+              </form>
+            </div>
+            <!-- Copyright text -->
+            <div class="text-center">
+              <p class="text-muted mt-4">
+                {{app.GetAppConfig("copyright")}}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Right column for authentication cover image -->
+  <div class="col-12 col-md-6 d-md-block d-none px-0">
+    <div class="auth-cover h-100"
+         style="background-image: url('assets/images/auth/cover.jpg');"></div>
+  </div>
+</div>
+<!-- Modals section start -->
+<div class="modal-container">
+
+</div>
