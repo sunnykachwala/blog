@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "rnIy+A2eNAxbazgD1uqdspDVi+TFM1qenKJQ6VsG/B4=",
+  "Source": "Np.Admin.WebApi",
+  "BasePath": "_content/Np.Admin.WebApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

@@ -1,0 +1,12 @@
+D:\source\epv\RPL.Auth.MFA\bin\Debug\net6.0\RPL.Auth.MFA.deps.json
+D:\source\epv\RPL.Auth.MFA\bin\Debug\net6.0\RPL.Auth.MFA.dll
+D:\source\epv\RPL.Auth.MFA\bin\Debug\net6.0\RPL.Auth.MFA.pdb
+D:\source\epv\RPL.Auth.MFA\obj\Debug\net6.0\RPL.Auth.MFA.csproj.AssemblyReference.cache
+D:\source\epv\RPL.Auth.MFA\obj\Debug\net6.0\RPL.Auth.MFA.GeneratedMSBuildEditorConfig.editorconfig
+D:\source\epv\RPL.Auth.MFA\obj\Debug\net6.0\RPL.Auth.MFA.AssemblyInfoInputs.cache
+D:\source\epv\RPL.Auth.MFA\obj\Debug\net6.0\RPL.Auth.MFA.AssemblyInfo.cs
+D:\source\epv\RPL.Auth.MFA\obj\Debug\net6.0\RPL.Auth.MFA.csproj.CoreCompileInputs.cache
+D:\source\epv\RPL.Auth.MFA\obj\Debug\net6.0\RPL.Auth.MFA.dll
+D:\source\epv\RPL.Auth.MFA\obj\Debug\net6.0\refint\RPL.Auth.MFA.dll
+D:\source\epv\RPL.Auth.MFA\obj\Debug\net6.0\RPL.Auth.MFA.pdb
+D:\source\epv\RPL.Auth.MFA\obj\Debug\net6.0\ref\RPL.Auth.MFA.dll

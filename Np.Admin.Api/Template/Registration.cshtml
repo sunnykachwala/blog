@@ -1,0 +1,69 @@
+﻿@model dynamic
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* Inline CSS for email compatibility */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        #header {
+            background-color: #f0f0f0;  
+            padding: 20px;
+        }
+
+        #logo {
+            max-width: 100px; /* Adjust logo size as needed */
+            display: block;
+        }
+
+        #content {
+            padding: 20px;
+        }
+
+        #vertical-line {
+            border-left: 2px solid #333;
+            height: 100px; /* Adjust height as needed */
+            margin: 0 20px;
+            display: inline-block;
+        }
+
+        #details {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        #footer {
+            background-color: #f0f0f0;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="header">
+        <img id="logo" src="@ViewData["WebUrl"]/assets/kemphartech_logo.svg" alt="Company Logo">
+    </div>
+    <hr />
+    <div id="content">
+        <div id="details">
+            <p>Dear @Model.FirstName </p>
+            <p>
+                To complete your registration, please click on the <a href="@ViewData["WebUrl"]/confirmregistration?LoginGUID=@Model.UserGuid&Code=@Model.ConfirmationCode">link</a> <br />
+                By clicking on the link, you will confirm your registration and gain access to all of our features. If you have any questions or concerns, please feel free to contact us <br />
+                
+            </p>
+
+            Thank you<br />
+            Best Regards.<br />
+        </div>
+    </div>
+    <hr />
+    <div id="footer">
+        <p>&copy; @DateTime.Now.Year KempharTech</p>
+    </div>
+</body>
+</html>
