@@ -1,0 +1,20 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/blog
+/.vs
+/Np.Admin.Api/obj
+/Np.Admin.Api/obj
+/Np.Admin.Api/obj
+/Np.Auth.MFA/obj/Release/net6.0
+/Np.Common/obj/Release/net6.0
+/Np.DAL/obj/Release/net6.0
+/Np.Public.Web/obj/Release/net6.0
+/Np.ViewModel/obj/Release/net6.0
+/Np.Admin.Api/obj/Debug/net6.0/Np.Admin.WebApi.csproj.AssemblyReference.cache
+/Np.DAL/obj/Debug/net6.0/Np.DAL.csproj.AssemblyReference.cache
+/Np.Admin.Service/obj/Release/net6.0
+Np.DAL/obj/Debug/net6.0/Np.DAL.csproj.AssemblyReference.cache
+Np.Admin.Service/obj/Debug/net6.0/Np.Admin.Service.csproj.AssemblyReference.cache
+Np.Admin.Api/obj/Debug/net6.0/Np.Admin.WebApi.csproj.AssemblyReference.cache
