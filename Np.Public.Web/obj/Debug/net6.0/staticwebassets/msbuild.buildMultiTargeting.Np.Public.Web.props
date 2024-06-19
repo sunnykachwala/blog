@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Np.Public.Web.props" />
+</Project>
