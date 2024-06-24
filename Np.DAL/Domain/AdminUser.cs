@@ -26,6 +26,8 @@
         public string? EncryptedSecret { get; set; }
         public bool EmailOTP { get; set; } = false;
         public Guid UserRoleGuid { get; set; }
+        // Navigation Property
+        public AdminUserRole AdminUserRole { get; set; }
         public bool TwofactorEnabled { get; set; }
         public Guid OrganisationGuid { get; set; }
         [MaxLength(128)]
@@ -43,7 +45,7 @@
         public string AppName { get; set; } = string.Empty;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-public Guid CreatedBy { get; set; }
+        public Guid CreatedBy { get; set; }
 
         public DateTime? ModifiedAt { get; set; } = DateTime.UtcNow;
         public Guid? ModifiedBy { get; set; }

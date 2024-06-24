@@ -173,6 +173,33 @@
            .HasDefaultValueSql("app_name()");
             #endregion
 
+            modelBuilder.Entity<Poll>()
+           .HasMany(p => p.PollQuestion)
+           .WithOne(q => q.Poll)
+           .HasForeignKey(q => q.PollId);
+
+            modelBuilder.Entity<PollQuestion>()
+                .HasMany(q => q.PollAnswer)
+                .WithOne(a => a.Question)
+                .HasForeignKey(a => a.QuestionId);
+
+            modelBuilder.Entity<PollAnswer>()
+                .HasMany(a => a.SubscriberAnswer)
+                .WithOne(ua => ua.PollAnswer)
+                .HasForeignKey(ua => ua.SubscriberAnswerId);
+
+            modelBuilder.Entity<Subscriber>()
+                .HasMany(u => u.SubscriberAnswer)
+                .WithOne(ua => ua.Subscriber)
+                .HasForeignKey(ua => ua.SubscriberId);
+
+            modelBuilder.Entity<SubscriberAnswer>()
+                .HasKey(ua => ua.SubscriberAnswerId);
+
+            modelBuilder.Entity<SubscriberAnswer>()
+                .HasIndex(ua => new { ua.SubscriberId, ua.SubscriberAnswerId })
+                .IsUnique();
+
             #region User Role Permission Mapping
             modelBuilder.Entity<RolePermissionMapping>()
            .Property(e => e.RolePermissionMappingId)
@@ -219,6 +246,11 @@
 
             #region User
             modelBuilder.Entity<AdminUser>()
+           .HasOne(u => u.AdminUserRole)
+           .WithOne(r => r.AdminUser)
+           .HasForeignKey<AdminUser>(u => u.UserRoleGuid);
+
+            modelBuilder.Entity<AdminUser>()
             .Property(e => e.UserGuid)
             .HasDefaultValueSql("NEWID()");
 
@@ -252,6 +284,11 @@
             modelBuilder.Entity<AdminUserRole>()
            .Property(e => e.AppName)
            .HasDefaultValueSql("app_name()");
+
+            modelBuilder.Entity<AdminUserRole>()
+          .HasOne(r => r.AdminUser)
+          .WithOne(u => u.AdminUserRole)
+          .HasForeignKey<AdminUser>(u => u.UserRoleGuid);
             #endregion
 
             #region User Permission

@@ -12,8 +12,8 @@ using Np.DAL.Context;
 namespace Np.DAL.Migrations
 {
     [DbContext(typeof(NewsPortalContext))]
-    [Migration("20240526233012_ArticleViewChanges")]
-    partial class ArticleViewChanges
+    [Migration("20240624220910_InitialChanges")]
+    partial class InitialChanges
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,9 +48,8 @@ namespace Np.DAL.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<byte>("LogType")
                         .HasColumnType("tinyint");
@@ -58,8 +57,8 @@ namespace Np.DAL.Migrations
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("SystemUser")
                         .IsRequired()
@@ -80,6 +79,11 @@ namespace Np.DAL.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
+                    b.Property<string>("AboutUser")
+                        .IsRequired()
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
                     b.Property<string>("AppName")
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
@@ -87,14 +91,18 @@ namespace Np.DAL.Migrations
                         .HasColumnType("nvarchar(256)")
                         .HasDefaultValueSql("app_name()");
 
+                    b.Property<string>("AvatarUrl")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getutcdate()");
 
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("EmailOTP")
                         .HasColumnType("bit");
@@ -127,8 +135,8 @@ namespace Np.DAL.Migrations
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("OrganisationGuid")
                         .HasColumnType("uniqueidentifier");
@@ -159,6 +167,9 @@ namespace Np.DAL.Migrations
 
                     b.HasKey("UserGuid");
 
+                    b.HasIndex("UserRoleGuid")
+                        .IsUnique();
+
                     b.HasIndex("UserEmail", "OrganisationGuid")
                         .IsUnique();
 
@@ -182,9 +193,13 @@ namespace Np.DAL.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatedBy")
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("DefaultHome")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("IsDefaultRole")
                         .HasColumnType("bit");
@@ -192,8 +207,8 @@ namespace Np.DAL.Migrations
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -210,6 +225,198 @@ namespace Np.DAL.Migrations
                     b.HasKey("UserRoleGuid");
 
                     b.ToTable("AdminUserRole");
+                });
+
+            modelBuilder.Entity("Np.DAL.Domain.AppSetting", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<string>("AppIcon")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("AppName")
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)")
+                        .HasDefaultValueSql("app_name()");
+
+                    b.Property<string>("ApplicationName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("AwardedPointsPerSpent")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CompanyAddress")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("CompanyCity")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("CompanyCountry")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("CompanyEmail")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("CompanyPhone")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("CompanyPostalCode")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("CompanyState")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("CompanyTaxNumber")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Copyright")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("DefaultCurrency")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<int>("DefaultCustomer")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DefaultLanguage")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("DefaultTimezone")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("InvoiceTemplate")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Logo")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("MailEncryption")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("MailHost")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("MailPassword")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("MailPort")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MailProtocol")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("MailUserName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("PayrollAccount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PurchaseAccount")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("RewardPointsWorth")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<int>("SaleAccount")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("SendInvoice")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SystemUser")
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)")
+                        .HasDefaultValueSql("suser_sname()");
+
+                    b.Property<string>("ThemeAppBar")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ThemeColor")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ThemeLayout")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ThemeSideBar")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppSetting");
                 });
 
             modelBuilder.Entity("Np.DAL.Domain.Article", b =>
@@ -236,9 +443,8 @@ namespace Np.DAL.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("DefaultImage")
                         .HasMaxLength(256)
@@ -270,8 +476,8 @@ namespace Np.DAL.Migrations
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("PublishedDate")
                         .HasColumnType("datetime2");
@@ -433,9 +639,8 @@ namespace Np.DAL.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("KeyValue")
                         .IsRequired()
@@ -445,8 +650,8 @@ namespace Np.DAL.Migrations
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("NewValues")
                         .HasColumnType("nvarchar(max)");
@@ -501,9 +706,8 @@ namespace Np.DAL.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Details")
                         .IsRequired()
@@ -531,8 +735,8 @@ namespace Np.DAL.Migrations
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("ParentCategoryId")
                         .HasColumnType("uniqueidentifier");
@@ -582,9 +786,8 @@ namespace Np.DAL.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("HashedConfirmationCode")
                         .IsRequired()
@@ -599,8 +802,8 @@ namespace Np.DAL.Migrations
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("ResetExpiryTime")
                         .HasColumnType("datetime2");
@@ -641,9 +844,8 @@ namespace Np.DAL.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -651,8 +853,8 @@ namespace Np.DAL.Migrations
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("OrganisationName")
                         .IsRequired()
@@ -672,6 +874,88 @@ namespace Np.DAL.Migrations
                         .IsUnique();
 
                     b.ToTable("Organisation");
+                });
+
+            modelBuilder.Entity("Np.DAL.Domain.Poll", b =>
+                {
+                    b.Property<Guid>("PollId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AppName")
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("SystemUser")
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.HasKey("PollId");
+
+                    b.ToTable("Poll");
+                });
+
+            modelBuilder.Entity("Np.DAL.Domain.PollAnswer", b =>
+                {
+                    b.Property<Guid>("AnswerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.HasKey("AnswerId");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("PollAnswer");
+                });
+
+            modelBuilder.Entity("Np.DAL.Domain.PollQuestion", b =>
+                {
+                    b.Property<Guid>("QuestionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PollId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.HasKey("QuestionId");
+
+                    b.HasIndex("PollId");
+
+                    b.ToTable("PollQuestion");
                 });
 
             modelBuilder.Entity("Np.DAL.Domain.RefreshToken", b =>
@@ -715,6 +999,76 @@ namespace Np.DAL.Migrations
                     b.ToTable("RefreshToken");
                 });
 
+            modelBuilder.Entity("Np.DAL.Domain.RolePermissionMapping", b =>
+                {
+                    b.Property<Guid>("RolePermissionMappingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<Guid>("UserPermissionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserRoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("RolePermissionMappingId");
+
+                    b.HasIndex("UserRoleId");
+
+                    b.HasIndex("UserPermissionId", "UserRoleId")
+                        .IsUnique();
+
+                    b.ToTable("RolePermissionMapping");
+                });
+
+            modelBuilder.Entity("Np.DAL.Domain.Subscriber", b =>
+                {
+                    b.Property<Guid>("SubscriberId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("IpAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsSubscribed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.HasKey("SubscriberId");
+
+                    b.ToTable("Subscriber");
+                });
+
+            modelBuilder.Entity("Np.DAL.Domain.SubscriberAnswer", b =>
+                {
+                    b.Property<Guid>("SubscriberAnswerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PollAnswerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SubscriberId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("SubscriberAnswerId");
+
+                    b.HasIndex("SubscriberId", "SubscriberAnswerId")
+                        .IsUnique();
+
+                    b.ToTable("SubscriberAnswer");
+                });
+
             modelBuilder.Entity("Np.DAL.Domain.Tag", b =>
                 {
                     b.Property<Guid>("Id")
@@ -732,9 +1086,8 @@ namespace Np.DAL.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Details")
                         .IsRequired()
@@ -762,8 +1115,8 @@ namespace Np.DAL.Migrations
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Slug")
                         .IsRequired()
@@ -820,6 +1173,63 @@ namespace Np.DAL.Migrations
                         .IsUnique();
 
                     b.ToTable("UrlRecord");
+                });
+
+            modelBuilder.Entity("Np.DAL.Domain.UserPermission", b =>
+                {
+                    b.Property<Guid>("UserPermissionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<string>("AppName")
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)")
+                        .HasDefaultValueSql("app_name()");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Permission")
+                        .IsRequired()
+                        .HasMaxLength(126)
+                        .HasColumnType("nvarchar(126)");
+
+                    b.Property<string>("SystemUser")
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)")
+                        .HasDefaultValueSql("suser_sname()");
+
+                    b.HasKey("UserPermissionId");
+
+                    b.ToTable("UserPermission");
+                });
+
+            modelBuilder.Entity("Np.DAL.Domain.AdminUser", b =>
+                {
+                    b.HasOne("Np.DAL.Domain.AdminUserRole", "AdminUserRole")
+                        .WithOne("AdminUser")
+                        .HasForeignKey("Np.DAL.Domain.AdminUser", "UserRoleGuid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AdminUserRole");
                 });
 
             modelBuilder.Entity("Np.DAL.Domain.Article", b =>
@@ -913,9 +1323,67 @@ namespace Np.DAL.Migrations
                     b.Navigation("ParentCategory");
                 });
 
+            modelBuilder.Entity("Np.DAL.Domain.PollAnswer", b =>
+                {
+                    b.HasOne("Np.DAL.Domain.PollQuestion", "Question")
+                        .WithMany("PollAnswer")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+                });
+
+            modelBuilder.Entity("Np.DAL.Domain.PollQuestion", b =>
+                {
+                    b.HasOne("Np.DAL.Domain.Poll", "Poll")
+                        .WithMany("PollQuestion")
+                        .HasForeignKey("PollId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Poll");
+                });
+
+            modelBuilder.Entity("Np.DAL.Domain.RolePermissionMapping", b =>
+                {
+                    b.HasOne("Np.DAL.Domain.AdminUserRole", "UserRole")
+                        .WithMany()
+                        .HasForeignKey("UserRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserRole");
+                });
+
+            modelBuilder.Entity("Np.DAL.Domain.SubscriberAnswer", b =>
+                {
+                    b.HasOne("Np.DAL.Domain.PollAnswer", "PollAnswer")
+                        .WithMany("SubscriberAnswer")
+                        .HasForeignKey("SubscriberAnswerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Np.DAL.Domain.Subscriber", "Subscriber")
+                        .WithMany("SubscriberAnswer")
+                        .HasForeignKey("SubscriberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PollAnswer");
+
+                    b.Navigation("Subscriber");
+                });
+
             modelBuilder.Entity("Np.DAL.Domain.ActivityLog", b =>
                 {
                     b.Navigation("AuditRecord");
+                });
+
+            modelBuilder.Entity("Np.DAL.Domain.AdminUserRole", b =>
+                {
+                    b.Navigation("AdminUser")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Np.DAL.Domain.Article", b =>
@@ -932,6 +1400,26 @@ namespace Np.DAL.Migrations
                     b.Navigation("ArticleCategories");
 
                     b.Navigation("Subcategories");
+                });
+
+            modelBuilder.Entity("Np.DAL.Domain.Poll", b =>
+                {
+                    b.Navigation("PollQuestion");
+                });
+
+            modelBuilder.Entity("Np.DAL.Domain.PollAnswer", b =>
+                {
+                    b.Navigation("SubscriberAnswer");
+                });
+
+            modelBuilder.Entity("Np.DAL.Domain.PollQuestion", b =>
+                {
+                    b.Navigation("PollAnswer");
+                });
+
+            modelBuilder.Entity("Np.DAL.Domain.Subscriber", b =>
+                {
+                    b.Navigation("SubscriberAnswer");
                 });
 
             modelBuilder.Entity("Np.DAL.Domain.Tag", b =>

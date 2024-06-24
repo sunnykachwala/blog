@@ -1,10 +1,13 @@
 ﻿namespace Np.DAL.Domain
 {
+    using System.ComponentModel.DataAnnotations;
     public class SubscriberAnswer
     {
-        public int SubscriberAnswerId { get; set; }
-        public int SubscriberId { get; set; }
-        public int AnswerId { get; set; }
+        [Key]
+        [Required]
+        public Guid SubscriberAnswerId { get; set; }
+        public Guid SubscriberId { get; set; }
+        public Guid PollAnswerId { get; set; }
 
         public Subscriber Subscriber { get; set; }
         public PollAnswer PollAnswer { get; set; }

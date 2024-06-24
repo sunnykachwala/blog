@@ -13,7 +13,6 @@
             using (var ctx = new NewsPortalContext(services.GetRequiredService<DbContextOptions<NewsPortalContext>>()))
             {
 
-
                 #region Application Setting
                 var applicationId = Guid.Parse("687EB657-26F7-4876-ADF0-EF81E03BD3EF");
                 var appSetting = new AppSetting()
@@ -61,19 +60,32 @@
                     ctx.SaveChanges();
                 }
                 #endregion
+
+                #region Role
                 var roleGuid = Guid.Parse("687EB657-26F7-4876-ADF0-EF81E03BD3EF");
-                AdminUserRole adminUserRole = new AdminUserRole()
+
+                var adminUserRole = new AdminUserRole()
                 {
                     UserRoleGuid = roleGuid,
                     Name = "Admin",
-                    IsDefaultRole = true
+                    IsDefaultRole = true,
+                    DefaultHome = "Dashboard"
                 };
+                ctx.AdminUserRole.Add(adminUserRole);
 
+                adminUserRole = new AdminUserRole()
+                {
+                    UserRoleGuid = Guid.NewGuid(),
+                    Name = "Author",
+                    IsDefaultRole = true,
+                    DefaultHome = "AuthorDashboard"
+                };
+                ctx.AdminUserRole.Add(adminUserRole);
                 if (!ctx.AdminUserRole.Any())
                 {
-                    ctx.AdminUserRole.Add(adminUserRole);
                     ctx.SaveChanges();
                 }
+                #endregion
 
                 #region Permission
                 //Login, Home, Dashboard, MyProfile
@@ -130,13 +142,6 @@
                     UserPermissionId = Guid.NewGuid(),
                     CreatedBy = applicationId,
                 };
-                var blogLRole = new UserPermission()
-                {
-                    IsActive = true,
-                    Permission = "Blog",
-                    UserPermissionId = Guid.NewGuid(),
-                    CreatedBy = applicationId,
-                };
 
                 var blogListRole = new UserPermission()
                 {
@@ -145,7 +150,6 @@
                     UserPermissionId = Guid.NewGuid(),
                     CreatedBy = applicationId,
                 };
-               
 
                 if (!ctx.UserPermission.Any())
                 {
@@ -235,7 +239,7 @@
                 #endregion
 
                 var organisationId = Guid.Parse("D05B9639-D60D-4A62-92FA-ACC9B6A59E5D");
-                Organisation organisation = new Organisation()
+                var organisation = new Organisation()
                 {
                     OrganisationGuid = organisationId,
                     OrganisationName = "KampherTech",
@@ -248,31 +252,40 @@
                     ctx.SaveChanges();
                 }
                 var userId = Guid.Parse("2838CDCF-BD76-44A2-9F65-26966CCBB18C");
-                if (!ctx.AdminUser!.Any())
+                if (!ctx.AdminUser.Any())
                 {
                     byte[] salt = UtilityHelper.GenerateSalt();
                     string randomPassword = "Test@123";
                     string hashedPassword = UtilityHelper.GenerateHashedPassword(salt, randomPassword);
-
-                    ctx.AdminUser!.Add(new AdminUser()
+                    var roleExists = ctx.AdminUserRole.Any(r => r.UserRoleGuid == roleGuid);
+                    if (!roleExists)
                     {
-                        UserGuid = userId,
-                        UserEmail = "sunny.vikingweb@gmail.com",
-                        FirstName = "Sunny",
-                        LastName = "Kachwala",
-                        UserRoleGuid = roleGuid,
-                        IsActive = true,
-                        LoginAttempts = 0,
-                        IsConfirmedRegistration = true,
-                        Salt = salt,
-                        HashedConformationCode = null,
-                        UserPasswordHash = hashedPassword,
-                        TwofactorEnabled = false,
-                        OrganisationGuid = organisationId
-                    });
-
-
-                    ctx.SaveChanges();
+                        throw new Exception("Specified role does not exist.");
+                    }
+                    else
+                    {
+                        var adminUser = new AdminUser()
+                        {
+                            UserGuid = userId,
+                            UserEmail = "sunny.vikingweb@gmail.com",
+                            FirstName = "Sunny",
+                            LastName = "Kachwala",
+                            UserRoleGuid = roleGuid,
+                            IsActive = true,
+                            LoginAttempts = 0,
+                            IsConfirmedRegistration = true,
+                            Salt = salt,
+                            HashedConformationCode = null,
+                            UserPasswordHash = hashedPassword,
+                            TwofactorEnabled = false,
+                            OrganisationGuid = organisationId,
+                            AboutUser = "Sunny Kachwala",
+                            AvatarUrl = "sunny.png"
+                        };
+                        ctx.AdminUser.Add(adminUser);
+                        ctx.SaveChanges();
+                    }
+                
                 }
             }
         }

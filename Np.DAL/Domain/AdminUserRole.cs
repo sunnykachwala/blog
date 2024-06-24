@@ -13,11 +13,13 @@
         public string Name { get; set; }
 
         public bool IsDefaultRole { get; set; } = false;
-       
+
         [Required]
         [StringLength(100)]
         public string DefaultHome { get; set; }
-
+        
+        // Navigation Property
+        public AdminUser AdminUser { get; set; }
 
         #region Inherited
         [MaxLength(256)]
@@ -28,10 +30,10 @@
         public string AppName { get; set; } = string.Empty;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-public Guid CreatedBy { get; set; }
+        public Guid CreatedBy { get; set; }
 
         public DateTime? ModifiedAt { get; set; } = DateTime.UtcNow;
-public Guid? ModifiedBy { get; set; }
+        public Guid? ModifiedBy { get; set; }
         #endregion
     }
 
