@@ -176,6 +176,26 @@
           </span>
         </a>
       </li>
+      <li *ngIf="app.HasSomePermission('Blog')"
+          class="has-submenu">
+        <a href="javascript:void(0);">
+          <i class="fa fa-cart-shopping"></i>
+          <span>
+            {{app.Localize('Blog')}}
+          </span>
+        </a>
+        <ul class="submenu">
+          <li *ngIf="app.HasPermission('Blog.List')">
+            <a [routerLinkActive]="'active'"
+               [routerLink]="['/blog/list']">
+              <i class="fa fa-cart-plus"></i>
+              <span>
+                {{app.Localize('Post')}}
+              </span>
+            </a>
+          </li>
+        </ul>
+      </li>
       <li *ngIf="app.HasSomePermission('Sales')"
           class="has-submenu">
         <a href="javascript:void(0);">

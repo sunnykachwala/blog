@@ -16,7 +16,7 @@
             optionsBuilder.EnableDetailedErrors();
         }
 
-        public int AuditSaveChanges(string userId, int ActivityLogId)
+        public int AuditSaveChanges(Guid userId, int ActivityLogId)
         {
             OnBeforeSaveChanges(userId, ActivityLogId);
             return base.SaveChanges();
@@ -270,7 +270,7 @@
 
         }
 
-        private void OnBeforeSaveChanges(string userId, int ActivityLogId)
+        private void OnBeforeSaveChanges(Guid userId, int ActivityLogId)
         {
             ChangeTracker.DetectChanges();
             var auditEntries = new List<AuditEntry>();

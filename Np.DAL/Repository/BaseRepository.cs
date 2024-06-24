@@ -83,7 +83,7 @@
             this.context.Dispose();
         }
 
-        public void SaveAudited(string userId, int ActivityLogId)
+        public void SaveAudited(Guid userId, int ActivityLogId)
         {
             this.context.AuditSaveChanges(userId, ActivityLogId);
         }

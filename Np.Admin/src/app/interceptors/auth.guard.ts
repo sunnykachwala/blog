@@ -21,7 +21,6 @@ export class AuthGuard {
     console.log('CanActivate called');
     const isLoggedIn = this.IsAuthenticated();
     const requiredPermission = next.data['permission'] as string;
-
     if (isLoggedIn) {
       this.initializePermissions();
 
@@ -47,12 +46,12 @@ export class AuthGuard {
 
   private IsAuthenticated(): boolean {
     const user = this.authenticationService.userValue;
-    return user ? !!localStorage.getItem("news_portal__User") : false;
+    return user ? !!localStorage.getItem("news_portal_user") : false;
   }
 
   private initializePermissions() {
     if (this.permissions === null) {
-      const storedUser = localStorage.getItem("news_portal__User");
+      const storedUser = localStorage.getItem("news_portal_user");
       if (storedUser) {
         const decodedUser = JSON.parse(storedUser);
         this.permissions = decodedUser.permissions.split(",").map((permission: string) => permission.trim());

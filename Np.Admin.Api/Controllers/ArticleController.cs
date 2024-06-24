@@ -16,19 +16,19 @@
             this.articleService = articleService;
         }
 
-
         [AllowAnonymous]
         [HttpPost("create")]
         public async Task<IActionResult> CreateArticel(CreateArticleDto model)
         {
             string ipAddress = CommonHelper.GetIPAddress(HttpContext);
 #if DEBUG
-            var articleId = await this.articleService.Add(model, ipAddress, "Sunny");
+            var articleId = await this.articleService.Add(model, ipAddress, Guid.NewGuid());
+
 #else
     base.InitializContext();
             if (base.LoggedInUserInfo == null)
                 return Unauthorized();
-                var articleId =  await this.articleService.Add(model,ipAddress, "Sunny");         
+                var articleId =  await this.articleService.Add(model,ipAddress,  base.LoggedInUserInfo.UserId);         
 #endif
             return Ok(new { message = $"Article Added successfully {articleId}." });
         }

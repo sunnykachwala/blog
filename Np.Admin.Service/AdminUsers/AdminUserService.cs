@@ -96,14 +96,14 @@
                 numBytesRequested: 256 / 8));
             if (hashedInputPassword != hashedPassword)
             {
-                await this.UpdateLoginAttempts(userInfo.UserEmail, "Admin");
+                await this.UpdateLoginAttempts(userInfo.UserEmail, Guid.NewGuid());
                 isAuthenticated = false;
             }
 
             return isAuthenticated;
         }
 
-        public async Task UpdateLoginAttempts(string email, string userName)
+        public async Task UpdateLoginAttempts(string email, Guid userName)
         {
             var userInfo = await this.userRepo.GetFindByColumnAsync(x => x.UserEmail == email);
             if (userInfo != null)
@@ -115,7 +115,7 @@
             }
         }
 
-        public async Task ResetLoginAttemps(string email, string userName)
+        public async Task ResetLoginAttemps(string email, Guid userName)
         {
             var userInfo = await this.userRepo.GetFindByColumnAsync(x => x.UserEmail == email);
             if (userInfo != null)
@@ -230,7 +230,7 @@
             }
         }
 
-        public async Task UpdateUser(UserInfoDto user, string userName)
+        public async Task UpdateUser(UserInfoDto user)
         {
             var userInfo = await this.userRepo.GetFindByColumnAsync(x => x.UserGuid != user.UserGuid && x.UserEmail == user.UserEmail);
 
@@ -243,14 +243,14 @@
                 throw new Exception($"User does not exists!");
 
             var userData = mapper.Map<AdminUser>(user);
-            userData.ModifiedBy = userName;
-            var activityId = this.activityLogService.CreateActivityLog("Update User", ActivityLogType.Update, userName);
+            userData.ModifiedBy = user.UserGuid;
+            var activityId = this.activityLogService.CreateActivityLog("Update User", ActivityLogType.Update, user.UserGuid);
 
             this.userRepo.Edit(userData);
-            this.userRepo.SaveAudited(userName, activityId);
+            this.userRepo.SaveAudited(user.UserGuid, activityId);
         }
 
-        public async Task<Guid> CreateUser(CreateUserDto userData, string confirmationCode, string modifiedBy)
+        public async Task<Guid> CreateUser(CreateUserDto userData, string confirmationCode, Guid modifiedBy)
         {
             byte[] salt = UtilityHelper.GenerateSalt();
             string randomPassword = UtilityHelper.GenerateSecurePassword(30);

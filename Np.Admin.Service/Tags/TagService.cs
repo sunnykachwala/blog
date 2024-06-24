@@ -32,7 +32,7 @@
             this.mapper = mapper;
         }
 
-        public async Task<Guid> Add(CreateTagDto model, string modifiedBy)
+        public async Task<Guid> Add(CreateTagDto model, Guid modifiedBy)
         {
             var tagInfo = await this.tagRepo.GetFindByColumnAsync(x => x.TagName == model.TagName);
 
@@ -79,7 +79,7 @@
             return tag.Id;
         }
 
-        public async Task Update(TagDto model, string modifiedBy)
+        public async Task Update(TagDto model, Guid modifiedBy)
         {
             var tag = await this.tagRepo.GetFindByColumnAsync(x => x.Id == model.Id) ?? throw new Exception($"Tag does not exist with the provided id {model.Id}");
 

@@ -6,9 +6,9 @@
     {
         public DateTime CreatedAt { get; set; }
         [MaxLength(256)]
-        public string CreatedBy { get; set; }
+        public Guid CreatedBy { get; set; }
         public DateTime? ModifiedAt { get; set; }
         [MaxLength(256)]
-        public string? ModifiedBy { get; set; }
+        public Guid? ModifiedBy { get; set; }
     }
 }

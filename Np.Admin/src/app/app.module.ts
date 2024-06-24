@@ -25,7 +25,14 @@ import { AuthenticationService } from './services/authentication.service';
 import { appInitializer } from './services/app.initializer';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HomeMenuComponent } from './home-menu/home-menu.component';
+import { MyProfileComponent } from './myaccount/myprofile/myprofile.component';
+import { AppSettingComponent } from './settings/appsetting/appsetting.component';
+import { RolesComponent } from './settings/roles/roles.component';
+import { TemplatesComponent } from './settings/templates/templates.component';
 
+
+//Material
+import { NgSelectModule } from '@ng-select/ng-select';
 
 registerLocaleData(en);
 
@@ -35,7 +42,11 @@ registerLocaleData(en);
     HomeComponent,
     LoginComponent,
     DashboardComponent,
-    HomeMenuComponent
+    HomeMenuComponent,
+    MyProfileComponent,
+    AppSettingComponent,
+    RolesComponent,
+    TemplatesComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +57,8 @@ registerLocaleData(en);
     FormsModule,
     IconsProviderModule,
     NzLayoutModule,
-    NzMenuModule
+    NzMenuModule,
+    NgSelectModule,
   ],
   providers: [
     { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AuthenticationService] },

@@ -1,7 +1,6 @@
 ﻿namespace Np.Admin.WebApi.Controllers
 {
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Np.Admin.Service.Tags;
     using Np.ViewModel;
@@ -22,12 +21,12 @@
         public async Task<IActionResult> CreateTag(CreateTagDto model)
         {
 #if DEBUG
-            var tagId = await this.tagService.Add(model, "Sunny");
+            var tagId = await this.tagService.Add(model, Guid.NewGuid());
 #else
     base.InitializContext();
             if (base.LoggedInUserInfo == null)
                 return Unauthorized();
-                var tagId =  await this.tagService.Add(model, "Sunny");         
+                var tagId =  await this.tagService.Add(model, base.LoggedInUserInfo.UserId);         
 #endif
             return Ok(new { message = $"Tag Added successfully {tagId}." });
         }
@@ -37,12 +36,12 @@
         public async Task<IActionResult> Update(TagDto model)
         {
 #if DEBUG
-            await this.tagService.Update(model, "Sunny");
+            await this.tagService.Update(model, Guid.NewGuid());
 #else
     base.InitializContext();
             if (base.LoggedInUserInfo == null)
                 return Unauthorized();
-              await this.tagService.Update(model, "Sunny");         
+              await this.tagService.Update(model, base.LoggedInUserInfo.UserId);         
 #endif
             return Ok(new { message = $"Tag Updated successfully." });
         }

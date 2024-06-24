@@ -56,8 +56,8 @@ namespace Np.Admin.WebApi.Controllers
                 return Unauthorized();
             string confirmationCode = UtilityHelper.GenerateConfirmationCode();
 
-           
-            var result = await this.userService.CreateUser(user, confirmationCode, base.LoggedInUserInfo.UserName);
+
+            var result = await this.userService.CreateUser(user, confirmationCode, base.LoggedInUserInfo.UserId);
 
             EmailDto email = new EmailDto()
             {
@@ -75,7 +75,7 @@ namespace Np.Admin.WebApi.Controllers
             var emailTemplate = new
             {
                 UserGuid = result.ToString(),
-                ConfirmationCode = confirmationCode,                
+                ConfirmationCode = confirmationCode,
                 FrontEndUrl = appConfig.AdminUrl,
                 user.FirstName,
             };
@@ -149,7 +149,7 @@ namespace Np.Admin.WebApi.Controllers
                 UserType = userInfo.UserType,
             };
 
-            await this.userService.UpdateUser(userData, base.LoggedInUserInfo.UserName);
+            await this.userService.UpdateUser(userData);
             return Ok(new { message = $"User updated successfully." });
         }
 
@@ -174,7 +174,7 @@ namespace Np.Admin.WebApi.Controllers
 
             userInfo.IsActive = isActive;
 
-            await this.userService.UpdateUser(userInfo, base.LoggedInUserInfo.UserName);
+            await this.userService.UpdateUser(userInfo);
             return Ok(new { message = $"User updated successfully." });
         }
 

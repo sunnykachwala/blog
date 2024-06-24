@@ -76,7 +76,7 @@
 
             if (!isAuthenticated)
             {
-                await this.userService.UpdateLoginAttempts(userInfo.UserEmail, userInfo.UserEmail);
+                await this.userService.UpdateLoginAttempts(userInfo.UserEmail, userInfo.UserGuid);
                 return BadRequest(new { errorMessage = $"Unrecognized User email / Password combination." });
             }
             ///check for IP ranged then check for two factor enabled or not 
@@ -95,7 +95,7 @@
                     // The client's IP is not within the range
                     if (userInfo.TwofactorEnabled)
                     {
-                        await this.userService.ResetLoginAttemps(userInfo.UserEmail, userInfo.UserEmail);
+                        await this.userService.ResetLoginAttemps(userInfo.UserEmail, userInfo.UserGuid);
                         var response = new AuthenticateResponse(userInfo, string.Empty, string.Empty);
                         return Ok(response);
                     }
@@ -104,7 +104,7 @@
 
             if (userInfo.TwofactorEnabled)
             {
-                await this.userService.ResetLoginAttemps(userInfo.UserEmail, userInfo.UserEmail);
+                await this.userService.ResetLoginAttemps(userInfo.UserEmail, userInfo.UserGuid);
                 var response = new AuthenticateResponse(userInfo, string.Empty, string.Empty);
                 return Ok(response);
             }
@@ -166,7 +166,7 @@
             }
             catch (Exception ex)
             {
-                await this.userService.UpdateLoginAttempts(userInfo.UserEmail, userInfo.UserEmail);
+                await this.userService.UpdateLoginAttempts(userInfo.UserEmail, userInfo.UserGuid);
                 return BadRequest(new { errorMessage = $"Error occured. {ex.Message}" });
             }
         }
@@ -304,7 +304,7 @@
 
             if (hashedInputPassword != hashedPassword)
             {
-                await this.userService.UpdateLoginAttempts(user.UserEmail, user.UserEmail);
+                await this.userService.UpdateLoginAttempts(user.UserEmail, user.UserGuid);
                 return BadRequest(new { errorMessage = "Unrecognized User email / Password combination." });
             }
 
@@ -320,7 +320,7 @@
                                  userName
                                  );
                 var qrResult = SecurityHelper.GenerateQRImage(existingSd);
-                await this.userService.ResetLoginAttemps(user.UserEmail, userName);
+                await this.userService.ResetLoginAttemps(user.UserEmail, user.UserGuid);
                 if (qrResult != null)
                 {
                     var file = File(qrResult.FileContents, qrResult.ContentType, qrResult.FileName);
@@ -344,7 +344,7 @@
                     accountName
                     );
 
-                await this.userService.ResetLoginAttemps(user.UserEmail, user.UserEmail);
+                await this.userService.ResetLoginAttemps(user.UserEmail, user.UserGuid);
                 var qrResult = SecurityHelper.GenerateQRImage(sd);
                 if (qrResult != null)
                 {
@@ -384,7 +384,7 @@
 
             if (hashedInputUserPassword != hashedPassword)
             {
-                await this.userService.UpdateLoginAttempts(user.UserEmail, user.UserEmail);
+                await this.userService.UpdateLoginAttempts(user.UserEmail, user.UserGuid);
                 return BadRequest(new { errorMessage = "Unrecognized User email / Password combination." });
             }
             user.UserPasswordHash = hashedInputUserPassword;
@@ -407,8 +407,8 @@
 
             user.UserPasswordHash = hashedInputPassword;
 
-            await userService.UpdateUser(user, user.UserEmail);
-            this.loginHistoryService.ResetLoginHistory(user.UserGuid, user.FirstName);
+            await userService.UpdateUser(user);
+            this.loginHistoryService.ResetLoginHistory(user.UserGuid, user.UserGuid);
             var expiryMins = appConfig.Password.ResetPasswordExpiryMins;
             var expiryDateTime = DateTime.UtcNow.AddHours(expiryMins);
             var history = new LoginResetHistoryDto()
@@ -420,7 +420,7 @@
                 ResetType = "QR",
                 Salt = saltnew
             };
-            this.loginHistoryService.CreateLoginHistory(history, user.FirstName);
+            this.loginHistoryService.CreateLoginHistory(history, user.UserGuid);
 
             var viewDataOrViewBag = new Dictionary<string, object>();
             viewDataOrViewBag["WebUrl"] = appConfig.AdminUrl.Replace("/#/", "");
@@ -477,7 +477,7 @@
             var confirmationCode = SecurityHelper.GetConfirmationCode();
             string hashedConfirmationCode = SecurityHelper.GetHasedText(saltnew, confirmationCode);
 
-            this.loginHistoryService.ResetLoginHistory(user.UserGuid, user.FirstName);
+            this.loginHistoryService.ResetLoginHistory(user.UserGuid, user.UserGuid);
 
             var expiryMins = appConfig.Password.ResetPasswordExpiryMins;
             var expiryDateTime = DateTime.UtcNow.AddHours(expiryMins);
@@ -491,7 +491,7 @@
                 Salt = saltnew
             };
 
-            this.loginHistoryService.CreateLoginHistory(history, user.FirstName);
+            this.loginHistoryService.CreateLoginHistory(history, user.UserGuid);
             var viewDataOrViewBag = new Dictionary<string, object>();
             viewDataOrViewBag["WebUrl"] = appConfig.AdminUrl.Replace("/#/", "");
             EmailDto email = new EmailDto()
@@ -622,8 +622,8 @@
 
             user.UserPasswordHash = hashedInputPassword;
 
-            await userService.UpdateUser(user, user.UserEmail);
-            this.loginHistoryService.ResetLoginHistory(user.UserGuid, user.FirstName);
+            await userService.UpdateUser(user);
+            this.loginHistoryService.ResetLoginHistory(user.UserGuid, user.UserGuid);
 
             return Ok(new { message = $"Success", userEmail = history.UserEmail });
         }
@@ -650,7 +650,7 @@
                 UserEmail = userInfo.UserEmail,
             };
             HttpContext.Items["UserClaims"] = userClaims as LoggedInUserInfo;
-            this.userService.ResetLoginAttemps(userInfo.UserEmail, userInfo.UserEmail);
+            this.userService.ResetLoginAttemps(userInfo.UserEmail, userInfo.UserGuid);
             return Ok(response);
         }
 

@@ -1,0 +1,266 @@
+<div class="main-content">
+  <div class="page-header">
+    <div class="page-block">
+      <div class="row align-items-center">
+        <div class="col-auto">
+          <!-- Page Title -->
+          <div class="page-header-title">
+            <h4>
+              {{app.Localize('My Profile')}}
+            </h4>
+          </div>
+          <!-- Breadcrumbs -->
+          <ul class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a [routerLink]="['/']">
+                <i class="fa fa-home me-1"></i>
+                {{app.Localize('Home')}}
+              </a>
+            </li>
+            <li class="breadcrumb-item">
+              {{app.Localize('My Profile')}}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Main Card Body -->
+  <div class="card">
+    <div class="card-body" [ngClass]="{'disabled loader-full': isLoading}">
+      <div *ngIf="!isLoading">
+        <!-- Profile Picture Section -->
+        <fieldset class="mb-4">
+          <legend class="heading-style-one mb-6">
+            <h3>
+              {{app.Localize('Profile Picture')}}
+            </h3>
+            <p>
+              {{app.Localize('This is how others will recognize you')}}
+            </p>
+          </legend>
+          <!-- Image Preview and Upload Input -->
+          <div [ngClass]="{'disabled': isImageSubmitted}">
+            <div class="u-image-preview mx-auto">
+              <input [ngModel]
+                     (change)="onFileInputChange($event)"
+                     id="imageFile"
+                     name="imageFile"
+                     type="file"
+                     accept=".jpg, .jpeg, .png, .gif, .svg, .webp, .Jpg, .ico">
+              <img [src]="user.avatarUrl"
+                   alt="user">
+              <button type="button"
+                      class="btn">
+                <i class="fa fa-edit"></i>
+              </button>
+            </div>
+          </div>
+        </fieldset>
+        <hr>
+        <!-- Profile Info Section -->
+        <fieldset class="mb-4">
+          <legend class="heading-style-one mb-6">
+            <h3>
+              {{app.Localize('Profile Info')}}
+            </h3>
+            <p>
+              {{app.Localize('Others deserve to know you more')}}
+            </p>
+          </legend>
+          <!-- Profile Information Form -->
+          <form action>
+            <div class="row">
+              <!-- Full Name and User Name -->
+              <div class="col-md-6 form-group">
+                <label for="fullName">
+                  {{ app.Localize("Full Name") }}
+                  <code>*</code>
+                </label>
+                <input [(ngModel)]="user.fullName"
+                       type="text"
+                       class="form-control"
+                       id="fullName"
+                       name="fullName"
+                       maxlength="150"
+                       readonly
+                       required>
+                <div class="invalid-feedback">
+                  {{ app.Localize("This field is required.") }}
+                </div>
+              </div>
+              <div class="col-md-6 form-group">
+                <label for="userName">
+                  {{ app.Localize("User Name") }}
+                  <code>*</code>
+                </label>
+                <input [(ngModel)]="user.userName"
+                       type="text"
+                       class="form-control"
+                       id="userName"
+                       name="userName"
+                       maxlength="100"
+                       readonly
+                       required>
+                <div class="invalid-feedback">
+                  {{ app.Localize("This field is required.") }}
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <!-- Email and Phone -->
+              <div class="col-md-6 form-group">
+                <label for="email">
+                  {{ app.Localize("Email") }}
+                  <code>*</code>
+                </label>
+                <input [(ngModel)]="user.email"
+                       [email]="true"
+                       type="email"
+                       class="form-control"
+                       id="email"
+                       name="email"
+                       maxlength="150"
+                       readonly
+                       required>
+                <div class="invalid-feedback">
+                  {{ app.Localize("Valid email required.") }}
+                </div>
+              </div>
+              <div class="col-md-6 form-group">
+                <label for="phone">
+                  {{ app.Localize("Phone") }}
+                  <code>*</code>
+                </label>
+                <input [(ngModel)]="user.phone"
+                       type="tel"
+                       class="form-control"
+                       id="phone"
+                       name="phone"
+                       pattern="^\+?[0-9]{1,20}$"
+                       maxlength="20"
+                       readonly
+                       required>
+                <div class="invalid-feedback">
+                  {{ app.Localize("Valid phone required.") }}
+                </div>
+              </div>
+            </div>
+          </form>
+        </fieldset>
+        <hr>
+        <!-- Two Factor Authentication Section -->
+        <fieldset class="mb-4">
+          <legend class="heading-style-one mb-6">
+            <h3>
+              {{app.Localize('2 Factor Auth')}}
+            </h3>
+            <p>
+              {{app.Localize('Two factor authentication')}}
+            </p>
+          </legend>
+          <!-- Two Factor Authentication Toggle -->
+          <div [ngClass]="{'disabled': isTwoFactorSubmitted}"
+               class="form-check form-switch d-flex align-items-center">
+            <input [(ngModel)]="user.isTwoFactorEnabled"
+                   (change)="onTwoFactorChange()"
+                   class="form-check-input me-3"
+                   type="checkbox"
+                   id="isTwoFactorEnabled"
+                   name="isTwoFactorEnabled">
+            <label for="isTwoFactorEnabled">
+              <span>
+                {{ app.Localize("Enabled") }}
+              </span>
+              <br>
+              <span class="text-muted">
+                {{ app.Localize("Toggle 2 factor authentication") }}
+              </span>
+            </label>
+          </div>
+        </fieldset>
+        <hr>
+        <!-- Change Password Section -->
+        <fieldset class="mb-4">
+          <legend class="heading-style-one mb-6">
+            <h3>
+              {{app.Localize('Change Password')}}
+            </h3>
+            <p>
+              {{app.Localize('For improved account security')}}
+            </p>
+          </legend>
+          <!-- Change Password Form -->
+          <form #frm="ngForm"
+                [ngClass]="{'was-validated': isValidated}"
+                (ngSubmit)="submitForm(frm)"
+                id="frm"
+                novalidate>
+            <!-- Old, New, and Confirm Password Inputs -->
+            <div class="form-group">
+              <label for="oldPassword">
+                {{ app.Localize("Old Password") }}
+                <code>*</code>
+              </label>
+              <input [(ngModel)]="changePassword.oldPassword"
+                     type="password"
+                     class="form-control"
+                     id="oldPassword"
+                     name="oldPassword"
+                     maxlength="30"
+                     required
+                     pattern="^((?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^a-zA-Z0-9])|(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9])|(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9])).{8,}$">
+              <div class="invalid-feedback">
+                {{ app.Localize("Password error message") }}
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="newPassword">
+                {{ app.Localize("New Password") }}
+                <code>*</code>
+              </label>
+              <input [(ngModel)]="changePassword.newPassword"
+                     type="password"
+                     class="form-control"
+                     id="newPassword"
+                     name="newPassword"
+                     maxlength="30"
+                     required
+                     pattern="^((?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^a-zA-Z0-9])|(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9])|(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9])).{8,}$">
+              <div class="invalid-feedback">
+                {{ app.Localize("Password error message") }}
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="confirmPassword">
+                {{ app.Localize("Confirm Password") }}
+                <code>*</code>
+              </label>
+              <input [(ngModel)]="changePassword.confirmPassword"
+                     type="password"
+                     class="form-control"
+                     id="confirmPassword"
+                     name="confirmPassword"
+                     maxlength="30"
+                     required
+                     pattern="^((?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^a-zA-Z0-9])|(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9])|(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9])).{8,}$">
+              <div class="invalid-feedback">
+                {{ app.Localize("Password error message") }}
+              </div>
+            </div>
+            <!-- Change Password Button -->
+            <div [ngClass]="{'disabled': isSubmitted}"
+                 class="mt-2">
+              <button [ngClass]="{'disabled btn-progress': isSubmitted}"
+                      type="submit"
+                      id="submit"
+                      class="btn btn-primary me-2">
+                {{app.Localize("Change Password")}}
+              </button>
+            </div>
+          </form>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>

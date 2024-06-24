@@ -14,7 +14,7 @@ namespace Np.Admin.Service.ActivityLogs
             this.activylogRepo = activylogRepo;
         }
 
-        public int CreateActivityLog(string activityLogName, ActivityLogType logType, string modifiedBy)
+        public int CreateActivityLog(string activityLogName, ActivityLogType logType, Guid modifiedBy)
         {
             var activity = new ActivityLog()
             {

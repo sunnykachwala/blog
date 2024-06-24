@@ -3,8 +3,8 @@
     using Np.ViewModel;
     public interface ILoginHistoryService
     {
-        void ResetLoginHistory(Guid userId, string modifiedBy);
-        void CreateLoginHistory(LoginResetHistoryDto loginResetHistoryDto, string modifiedBy);
+        void ResetLoginHistory(Guid userId, Guid modifiedBy);
+        void CreateLoginHistory(LoginResetHistoryDto loginResetHistoryDto, Guid modifiedBy);
         Task<LoginHistoryDto?> GetLoginHistory(Guid userId, bool isActive, string resetType);
     }
 }

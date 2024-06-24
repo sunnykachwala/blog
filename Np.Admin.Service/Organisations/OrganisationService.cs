@@ -1,11 +1,11 @@
-﻿using Np.DAL.Domain;
-using Np.DAL.Repository;
-namespace Np.Admin.Service.Organisations
+﻿namespace Np.Admin.Service.Organisations
 {
     using Np.ViewModel;
     using AutoMapper;
-    using global::Np.Common;
+    using Np.Common;
     using Microsoft.EntityFrameworkCore;
+    using Np.DAL.Domain;
+    using Np.DAL.Repository;
 
     public class OrganisationService : IOrganisationService
     {
@@ -19,7 +19,7 @@ namespace Np.Admin.Service.Organisations
             this.mapper = mapper;
         }
 
-        public async Task<Guid> AddOrganisation(CreateOrganisationDto organisation, string modifiedBy)
+        public async Task<Guid> AddOrganisation(CreateOrganisationDto organisation, Guid modifiedBy)
         {
             var orgInfo = await this.GetOrganisatonByName(organisation.OrganisationName);
 
@@ -33,7 +33,7 @@ namespace Np.Admin.Service.Organisations
             return org.OrganisationGuid;
         }
 
-        public async Task<Guid> UpdateOrganisation(OrganisationDto organisation, string modifiedBy)
+        public async Task<Guid> UpdateOrganisation(OrganisationDto organisation, Guid modifiedBy)
         {
             var duplicateOrganisation = await this.orgRepo.GetFindByColumnAsync(x => x.OrganisationGuid != organisation.OrganisationGuid && x.OrganisationName == organisation.OrganisationName);
 

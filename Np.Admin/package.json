@@ -23,12 +23,15 @@
     "@angular/platform-browser-dynamic": "^16.1.0",
     "@angular/router": "^16.1.0",
     "@ant-design/icons-angular": "^16.0.0",
+    "@ng-select/ng-select": "^11.1.1",
     "bootstrap": "^5.3.0",
+    "classlist.js": "^1.1.20150312",
     "jest-editor-support": "*",
     "jquery": "^3.7.0",
     "ng-zorro-antd": "^16.2.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
+    "web-animations-js": "^2.3.2",
     "zone.js": "~0.13.0"
   },
   "devDependencies": {

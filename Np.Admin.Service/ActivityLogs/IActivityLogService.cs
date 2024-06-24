@@ -4,6 +4,6 @@ namespace Np.Admin.Service.ActivityLogs
 {
     public interface IActivityLogService
     {
-        int CreateActivityLog(string activityLogName, ActivityLogType logType, string modifiedBy);
+        int CreateActivityLog(string activityLogName, ActivityLogType logType, Guid modifiedBy);
     }
 }

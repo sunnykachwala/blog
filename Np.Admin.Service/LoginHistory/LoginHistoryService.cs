@@ -22,22 +22,23 @@ namespace Np.Admin.Service.LoginHistory
             this.userRepo = userRepo;
         }
 
-        public void ResetLoginHistory(Guid userId, string modifiedBy)
+        public void ResetLoginHistory(Guid userId, Guid modifiedBy)
         {
             var loginHistory = this.loginHistoryRepo.GetAll().Where(x => x.LoginGuid == userId && x.IsActive).ToList();
             foreach (var login in loginHistory)
             {
                 login.IsActive = false;
+                login.ModifiedBy = modifiedBy;
                 this.loginHistoryRepo.Edit(login);
             }
             this.loginHistoryRepo.Save();
         }
 
-        public void CreateLoginHistory(LoginResetHistoryDto loginResetHistoryDto, string modifiedBy)
+        public void CreateLoginHistory(LoginResetHistoryDto loginResetHistoryDto, Guid modifiedBy)
         {
             var history = mapper.Map<LoginResetHistory>(loginResetHistoryDto);
             history.LoginResetHistoryGuid = Guid.NewGuid();
-            history.CreatedBy= modifiedBy;
+            history.CreatedBy = modifiedBy;
             this.loginHistoryRepo.Insert(history);
             this.loginHistoryRepo.Save();
         }

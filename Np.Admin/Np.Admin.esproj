@@ -12,5 +12,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="src\app\auth\" />
+    <Folder Include="src\app\myaccount\" />
+    <Folder Include="src\app\settings\" />
   </ItemGroup>
 </Project>

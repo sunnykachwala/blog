@@ -42,13 +42,14 @@ export class AppService {
     private http: HttpClient,
     private router: Router,
     private location: Location,
-   private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService
   ) {
+    console.log(this.router.config);
     // Decode user data from localStorage
-    const decodedUser = localStorage.getItem("news_portal__User")
-      ? JSON.parse(localStorage.getItem("news_portal__User") ?? "")
+    const decodedUser = localStorage.getItem("news_portal_user")
+      ? JSON.parse(localStorage.getItem("news_portal_user") ?? "")
       : null;
-
+     
     // Decode app appConfig from localStorage
     const decodedAppConfig = localStorage.getItem("news_portal_AppConfig")
       ? JSON.parse(localStorage.getItem("news_portal_AppConfig") ?? "")
@@ -133,7 +134,7 @@ export class AppService {
             data.decimalSeparator = this.decimalSeparator;
             data.groupSeparator = this.groupSeparator;
             data.currencySymbol = this.currencySymbol;
-            localStorage.setItem("kemphertech_LocalizationData", JSON.stringify(data));
+            localStorage.setItem("news_portal_LocalizationData", JSON.stringify(data));
             this.ChangeDirection(data.isRtl ? 'rtl' : 'ltr');
           },
           error: (errorResponse: any) => {
@@ -221,12 +222,22 @@ export class AppService {
   }
 
   public HasPermission(permission: any) {
+
     return this.userPermissions.includes(permission);
   }
 
   public HasSomePermission(permission: any) {
-    return this.userPermissions.some((userPermission: any) => userPermission.startsWith(permission));
+    let hasPermission = this.userPermissions.some((userPermission: any) => userPermission.startsWith(permission));
+    return hasPermission;
   }
+  public HasSomePermissionNew(permission: any) {
+    let hasPermission = this.userPermissions.some((userPermission: any) => userPermission.startsWith(permission));
+    console.log(hasPermission);
+    console.log(permission);
+    return hasPermission;
+  
+  }
+
 
   private getApplicationSetting() {
     return this.http.get<APIResponse<any>>(`${environment.apiUrl}app/appconfig`, { withCredentials: true })
@@ -272,7 +283,7 @@ export class AppService {
 
     $(".splash").removeAttr("style");
     // data.permissions = 'Login,Home,Dashboard,MyProfile';
-    localStorage.setItem("news_portal__User", JSON.stringify(data));
+    localStorage.setItem("news_portal_user", JSON.stringify(data));
     this.userPermissions = data.permissions.split(",").map((permission: any) => permission.trim());
     //this.userPermissions = 'Login,Home,Dashboard,MyProfile'.split(",").map((permission: any) => permission.trim());
     this.user = {
@@ -294,7 +305,7 @@ export class AppService {
       console.log('Return URL Exists:', returnUrlExists);
 
       if (returnUrlExists) {
-        this.router.navigate([returnUrl]).then(success => {
+        this.router.navigate([returnUrl]).then((success: any) => {
           console.log('Navigation Success:', success);
           if (!success) {
             window.location.href = returnUrlWithoutSlash;
@@ -323,7 +334,7 @@ export class AppService {
 
   // Check if the user is authenticated
   public IsAuthenticated() {
-    return !!localStorage.getItem("news_portal__User");
+    return !!localStorage.getItem("news_portal_user");
   }
 
   // Check if the user has permission
@@ -397,8 +408,8 @@ export class AppService {
           data.decimalSeparator = this.decimalSeparator;
           data.groupSeparator = this.groupSeparator;
           data.currencySymbol = this.currencySymbol;
-          localStorage.removeItem("kemphertech_LocalizationData");
-          localStorage.setItem("kemphertech_LocalizationData", JSON.stringify(data));
+          localStorage.removeItem("news_portal_LocalizationData");
+          localStorage.setItem("news_portal_LocalizationData", JSON.stringify(data));
           this.ChangeDirection(data.isRtl ? 'rtl' : 'ltr');
           window.location.reload();
         },

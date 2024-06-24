@@ -27,7 +27,7 @@
             return urlRecordExist == null;
         }
 
-        public Guid AddUrlRecord(CreateUrlReordDto model, string modifiedBy)
+        public Guid AddUrlRecord(CreateUrlReordDto model, Guid modifiedBy)
         {
             var urlRecord = new UrlRecord()
             {

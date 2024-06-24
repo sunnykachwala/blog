@@ -26,6 +26,6 @@
         int ExecuteSqlQuery(string sql);
 
         void Save();
-        void SaveAudited(string userId, int ActivityLogId);
+        void SaveAudited(Guid userId, int ActivityLogId);
     }
 }

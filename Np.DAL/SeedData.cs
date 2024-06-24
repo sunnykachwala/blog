@@ -13,6 +13,7 @@
             using (var ctx = new NewsPortalContext(services.GetRequiredService<DbContextOptions<NewsPortalContext>>()))
             {
 
+
                 #region Application Setting
                 var applicationId = Guid.Parse("687EB657-26F7-4876-ADF0-EF81E03BD3EF");
                 var appSetting = new AppSetting()
@@ -82,35 +83,81 @@
                     IsActive = true,
                     Permission = "Login",
                     UserPermissionId = Guid.NewGuid(),
-                    CreatedBy = "Admin",
+                    CreatedBy = applicationId
                 };
                 var home = new UserPermission()
                 {
                     IsActive = true,
                     Permission = "Home",
                     UserPermissionId = Guid.NewGuid(),
-                    CreatedBy = "Admin",
+                    CreatedBy = applicationId
                 };
                 var dashboard = new UserPermission()
                 {
                     IsActive = true,
                     Permission = "Dashboard",
                     UserPermissionId = Guid.NewGuid(),
-                    CreatedBy = "Admin",
+                    CreatedBy = applicationId
                 };
                 var myprofile = new UserPermission()
                 {
                     IsActive = true,
                     Permission = "MyProfile",
                     UserPermissionId = Guid.NewGuid(),
-                    CreatedBy = "Admin",
+                    CreatedBy = applicationId,
                 };
+
+                var appSettingRole = new UserPermission()
+                {
+                    IsActive = true,
+                    Permission = "Settings.AppSetting",
+                    UserPermissionId = Guid.NewGuid(),
+                    CreatedBy = applicationId,
+                };
+
+                var roles = new UserPermission()
+                {
+                    IsActive = true,
+                    Permission = "Settings.Roles",
+                    UserPermissionId = Guid.NewGuid(),
+                    CreatedBy = applicationId,
+                };
+
+                var templateRole = new UserPermission()
+                {
+                    IsActive = true,
+                    Permission = "Settings.Templates",
+                    UserPermissionId = Guid.NewGuid(),
+                    CreatedBy = applicationId,
+                };
+                var blogLRole = new UserPermission()
+                {
+                    IsActive = true,
+                    Permission = "Blog",
+                    UserPermissionId = Guid.NewGuid(),
+                    CreatedBy = applicationId,
+                };
+
+                var blogListRole = new UserPermission()
+                {
+                    IsActive = true,
+                    Permission = "  ",
+                    UserPermissionId = Guid.NewGuid(),
+                    CreatedBy = applicationId,
+                };
+               
+
                 if (!ctx.UserPermission.Any())
                 {
                     ctx.UserPermission.Add(login);
                     ctx.UserPermission.Add(home);
                     ctx.UserPermission.Add(dashboard);
                     ctx.UserPermission.Add(myprofile);
+
+                    ctx.UserPermission.Add(appSettingRole);
+                    ctx.UserPermission.Add(roles);
+                    ctx.UserPermission.Add(templateRole);
+                    ctx.UserPermission.Add(blogListRole);
                     ctx.SaveChanges();
                 }
                 #endregion
@@ -144,17 +191,48 @@
                     UserRoleId = roleGuid,
                 };
 
+                var appSettingRoleMapping = new RolePermissionMapping()
+                {
+                    RolePermissionMappingId = Guid.NewGuid(),
+                    UserPermissionId = appSettingRole.UserPermissionId,
+                    UserRoleId = roleGuid,
+                };
+
+                var userRoleMapping = new RolePermissionMapping()
+                {
+                    RolePermissionMappingId = Guid.NewGuid(),
+                    UserPermissionId = roles.UserPermissionId,
+                    UserRoleId = roleGuid,
+                };
+
+                var templateRoleMapping = new RolePermissionMapping()
+                {
+                    RolePermissionMappingId = Guid.NewGuid(),
+                    UserPermissionId = templateRole.UserPermissionId,
+                    UserRoleId = roleGuid,
+                };
+
+                var blogListRoleMapping = new RolePermissionMapping()
+                {
+                    RolePermissionMappingId = Guid.NewGuid(),
+                    UserPermissionId = blogListRole.UserPermissionId,
+                    UserRoleId = roleGuid,
+                };
+
                 if (!ctx.RolePermissionMapping.Any())
                 {
                     ctx.RolePermissionMapping.Add(loginAdminMapping);
                     ctx.RolePermissionMapping.Add(homeAdminMapping);
                     ctx.RolePermissionMapping.Add(dashboadAdminMapping);
                     ctx.RolePermissionMapping.Add(myprofileAdminMapping);
+
+                    ctx.RolePermissionMapping.Add(appSettingRoleMapping);
+                    ctx.RolePermissionMapping.Add(userRoleMapping);
+                    ctx.RolePermissionMapping.Add(templateRoleMapping);
+                    ctx.RolePermissionMapping.Add(blogListRoleMapping);
                     ctx.SaveChanges();
                 }
                 #endregion
-
-
 
                 var organisationId = Guid.Parse("D05B9639-D60D-4A62-92FA-ACC9B6A59E5D");
                 Organisation organisation = new Organisation()

@@ -32,7 +32,7 @@
             this.cache = cache;
         }
 
-        public async Task<Guid> Add(CreateCategoryDto model, string modifiedBy)
+        public async Task<Guid> Add(CreateCategoryDto model, Guid modifiedBy)
         {
             var categoryInfo = await this.categoryRepo.GetFindByColumnAsync(x => x.Title == model.Title);
 
@@ -79,7 +79,7 @@
             return category.Id;
         }
 
-        public async Task Update(CategoryDto model, string modifiedBy)
+        public async Task Update(CategoryDto model, Guid modifiedBy)
         {
             var category = await this.categoryRepo.GetFindByColumnAsync(x => x.Id == model.Id) ?? throw new Exception($"Category does not exist with the provided id {model.Id}");
 

@@ -36,7 +36,7 @@
             this.activityLogService = activityLogService;
         }
 
-        public async Task<Guid> Add(CreateArticleDto model, string ipAddress, string modifiedBy)
+        public async Task<Guid> Add(CreateArticleDto model, string ipAddress, Guid modifiedBy)
         {
             var activityId = this.activityLogService.CreateActivityLog("Create Article", ActivityLogType.Create, modifiedBy);
 

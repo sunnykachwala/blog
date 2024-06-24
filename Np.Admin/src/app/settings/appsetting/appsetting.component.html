@@ -1,0 +1,1244 @@
+<nav class="top-nav">
+  <!-- Navigation bar with list items for different setting tabs -->
+  <div class="row g-0">
+    <div class="col-12">
+      <ul class="list-items">
+        <!-- General Setting tab -->
+        <li [ngClass]="{'active' : tabs.general}"
+            (click)="fetchGeneralSetting()"
+            class="item">
+          <i class="fas fa-display"></i>
+          <span>
+            {{app.Localize('General')}}
+          </span>
+        </li>
+        <!-- System Setting tab -->
+        <li [ngClass]="{'active' : tabs.system}"
+            (click)="fetchSystemSetting()"
+            class="item">
+          <i class="fas fa-gears"></i>
+          <span>
+            {{app.Localize('System')}}
+          </span>
+        </li>
+        <!-- Email Setting tab -->
+        <li [ngClass]="{'active' : tabs.email}"
+            (click)="fetchEmailSetting()"
+            class="item">
+          <i class="fas fa-envelope"></i>
+          <span>
+            {{app.Localize('E-Mail')}}
+          </span>
+        </li>
+        <!-- POS Setting tab -->
+        <li [ngClass]="{'active' : tabs.pos}"
+            (click)="fetchPOSSetting()"
+            class="item">
+          <i class="fa fa-receipt"></i>
+          <span>
+            {{app.Localize('POS')}}
+          </span>
+        </li>
+        <!-- Theme Setting tab -->
+        <li [ngClass]="{'active' : tabs.theme}"
+            (click)="fetchThemeSetting()"
+            class="item">
+          <i class="fa fa-sliders"></i>
+          <span>
+            {{app.Localize('Theme')}}
+          </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="main-content">
+  <!-- General Setting tab content -->
+  <div [ngClass]="{'d-none' : !tabs.general}">
+    <!-- General Setting card -->
+    <div class="card">
+      <div class="card-header">
+        <!-- Header with Home link button and title -->
+        <div class="d-flex align-items-center">
+          <a [routerLink]="['/']"
+             class="home-btn"
+             data-bs-toggle="tooltip"
+             title="Home"></a>
+          <h4 class="title ms-2">
+            {{app.Localize('General Setting')}}
+          </h4>
+        </div>
+      </div>
+      <div *ngIf="isGeneralFormLoading"
+           class="p-4">
+        <div class="d-flex justify-content-center">
+          <div class="loader-full"></div>
+        </div>
+      </div>
+      <div *ngIf="!isGeneralFormLoading"
+           class="card-body">
+        <!-- General Setting form -->
+        <form #generalForm="ngForm"
+              [ngClass]="{'was-validated' : isGeneralFormValidated}"
+              (ngSubmit)="submitGeneralForm(generalForm)"
+              class="needs-validation"
+              enctype="multipart/form-data"
+              novalidate>
+          <!-- Form fields for App Name and Default Customer -->
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <label for="appName"
+                     class="control-label">
+                {{app.Localize("App Name")}}
+                <code>*</code>
+              </label>
+              <input [(ngModel)]="generalSetting.settings.appName"
+                     id="appName"
+                     name="appName"
+                     type="text"
+                     class="form-control"
+                     maxlength="100"
+                     required>
+              <div class="invalid-feedback">
+                {{app.Localize("This field is required.")}}
+              </div>
+            </div>
+            <div class="col-md-6 form-group">
+              <label for="defaultCustomer"
+                     class="control-label">
+                {{app.Localize("Default Customer")}}
+                <code>*</code>
+              </label>
+              <ng-select [searchable]="true"
+                         [(ngModel)]="generalSetting.settings.defaultCustomer"
+                         [multiple]="false"
+                         [placeholder]="app.Localize('Choose an option')"
+                         [clearable]="false"
+                         [required]="true"
+                         [ngClass]="{ 'is-invalid': !generalSetting.settings.defaultCustomer && isGeneralFormValidated }"
+                         name="defaultCustomer"
+                         id="defaultCustomer"
+                         class="form-control">
+                <ng-option *ngFor="let option of generalSetting.customers"
+                           [value]="option.id">
+                  {{ option.customerName }}
+                </ng-option>
+              </ng-select>
+              <div *ngIf="!generalSetting.settings.defaultCustomer && isGeneralFormValidated"
+                   class="invalid-feedback">
+                {{app.Localize("This field is required.")}}
+              </div>
+            </div>
+          </div>
+          <!-- Form fields for Sale Account, Purchase Account, Payroll Account, and Copyright -->
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <label for="saleAccount"
+                     class="control-label">
+                {{app.Localize("Sale Account")}}
+                <code>*</code>
+              </label>
+              <ng-select [searchable]="true"
+                         [(ngModel)]="generalSetting.settings.saleAccount"
+                         [multiple]="false"
+                         [placeholder]="app.Localize('Choose an option')"
+                         [clearable]="false"
+                         [required]="true"
+                         [ngClass]="{ 'is-invalid': !generalSetting.settings.saleAccount && isGeneralFormValidated }"
+                         name="saleAccount"
+                         id="saleAccount"
+                         class="form-control">
+                <ng-option *ngFor="let option of generalSetting.accounts"
+                           [value]="option.id">
+                  {{ option.accountName }}
+                </ng-option>
+              </ng-select>
+              <div *ngIf="!generalSetting.settings.saleAccount && isGeneralFormValidated"
+                   class="invalid-feedback">
+                {{app.Localize("This field is required.")}}
+              </div>
+            </div>
+            <div class="col-md-6 form-group">
+              <label for="purchaseAccount"
+                     class="control-label">
+                {{app.Localize("Purchase Account")}}
+                <code>*</code>
+              </label>
+              <ng-select [searchable]="true"
+                         [(ngModel)]="generalSetting.settings.purchaseAccount"
+                         [multiple]="false"
+                         [placeholder]="app.Localize('Choose an option')"
+                         [clearable]="false"
+                         [required]="true"
+                         [ngClass]="{ 'is-invalid': !generalSetting.settings.purchaseAccount && isGeneralFormValidated }"
+                         name="purchaseAccount"
+                         id="purchaseAccount"
+                         class="form-control">
+                <ng-option *ngFor="let option of generalSetting.accounts"
+                           [value]="option.id">
+                  {{ option.accountName }}
+                </ng-option>
+              </ng-select>
+              <div *ngIf="!generalSetting.settings.purchaseAccount && isGeneralFormValidated"
+                   class="invalid-feedback">
+                {{app.Localize("This field is required.")}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <label for="payrollAccount"
+                     class="control-label">
+                {{app.Localize("Payroll Account")}}
+                <code>*</code>
+              </label>
+              <ng-select [searchable]="true"
+                         [(ngModel)]="generalSetting.settings.payrollAccount"
+                         [multiple]="false"
+                         [placeholder]="app.Localize('Choose an option')"
+                         [clearable]="false"
+                         [required]="true"
+                         [ngClass]="{ 'is-invalid': !generalSetting.settings.payrollAccount && isGeneralFormValidated }"
+                         name="payrollAccount"
+                         id="payrollAccount"
+                         class="form-control">
+                <ng-option *ngFor="let option of generalSetting.accounts"
+                           [value]="option.id">
+                  {{ option.accountName }}
+                </ng-option>
+              </ng-select>
+              <div *ngIf="!generalSetting.settings.payrollAccount && isGeneralFormValidated"
+                   class="invalid-feedback">
+                {{app.Localize("This field is required.")}}
+              </div>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="copyright"
+                     class="control-label">
+                {{app.Localize("Copyright")}}
+                <code>*</code>
+              </label>
+              <input [(ngModel)]="generalSetting.settings.copyright"
+                     id="copyright"
+                     name="copyright"
+                     type="text"
+                     class="form-control"
+                     maxlength="100"
+                     required>
+              <div class="invalid-feedback">
+                {{app.Localize("This field is required.")}}
+              </div>
+            </div>
+          </div>
+          <div class="heading-style-two">
+            <h3 class="h-title">
+              {{app.Localize('Company Information')}}
+            </h3>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="companyName"
+                     class="control-label">
+                {{app.Localize("Name")}}
+                <code>*</code>
+              </label>
+              <input [(ngModel)]="generalSetting.settings.companyName"
+                     id="companyName"
+                     name="companyName"
+                     type="text"
+                     class="form-control"
+                     maxlength="100"
+                     required>
+              <div class="invalid-feedback">
+                {{app.Localize("This field is required.")}}
+              </div>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="companyTaxNumber"
+                     class="control-label">
+                {{app.Localize("Tax Number")}}
+                <code>*</code>
+              </label>
+              <input [(ngModel)]="generalSetting.settings.companyTaxNumber"
+                     id="companyTaxNumber"
+                     name="companyTaxNumber"
+                     type="text"
+                     class="form-control"
+                     maxlength="50"
+                     required>
+              <div class="invalid-feedback">
+                {{app.Localize("This field is required.")}}
+              </div>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="companyEmail">
+                {{app.Localize("Email")}}
+                <code>*</code>
+              </label>
+              <input [(ngModel)]="generalSetting.settings.companyEmail"
+                     [email]="true"
+                     type="companyEmail"
+                     class="form-control"
+                     id="companyEmail"
+                     name="companyEmail"
+                     maxlength="100"
+                     required>
+              <div class="invalid-feedback">
+                {{app.Localize("Please enter valid email.")}}
+              </div>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="companyPhone">
+                {{app.Localize("Phone")}}
+                <code>*</code>
+              </label>
+              <input [(ngModel)]="generalSetting.settings.companyPhone"
+                     type="tel"
+                     class="form-control"
+                     id="companyPhone"
+                     name="companyPhone"
+                     pattern="^\+?[0-9]{1,20}$"
+                     maxlength="20"
+                     required>
+              <div class="invalid-feedback">
+                {{app.Localize("Please enter valid phone.")}}
+              </div>
+            </div>
+            <div class="form-group col-md-12">
+              <label for="companyAddress">
+                {{app.Localize("Address")}}
+                <code>*</code>
+              </label>
+              <textarea [(ngModel)]="generalSetting.settings.companyAddress"
+                        class="form-control"
+                        id="companyAddress"
+                        name="companyAddress"
+                        maxlength="250"
+                        required></textarea>
+              <div class="invalid-feedback">
+                {{app.Localize("This field is required.")}}
+              </div>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="companyCity">
+                {{app.Localize("City")}}
+              </label>
+              <input [(ngModel)]="generalSetting.settings.companyCity"
+                     class="form-control"
+                     id="companyCity"
+                     name="companyCity"
+                     type="text">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="companyState">
+                {{app.Localize("State")}}
+              </label>
+              <input [(ngModel)]="generalSetting.settings.companyState"
+                     class="form-control"
+                     id="companyState"
+                     name="companyState"
+                     type="text">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="companyPostalCode">
+                {{app.Localize("PostalCode")}}
+              </label>
+              <input [(ngModel)]="generalSetting.settings.companyPostalCode"
+                     class="form-control"
+                     id="companyPostalCode"
+                     name="companyPostalCode"
+                     type="text">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="companyCountry">
+                {{app.Localize("Country")}}
+              </label>
+              <input [(ngModel)]="generalSetting.settings.companyCountry"
+                     class="form-control"
+                     id="companyCountry"
+                     name="companyCountry"
+                     type="text">
+            </div>
+          </div>
+          <!-- Form fields for Logo and App Icon -->
+          <div class="row">
+            <div class="col-md-4 col-lg-3 form-group">
+              <label for="logo"
+                     class="control-label">
+                {{app.Localize("Logo")}}
+              </label>
+              <div class="image-preview"
+                   style="background-image:url('{{generalSetting.settings.logo}}')">
+                <label>
+                  {{app.Localize("Choose File")}}
+                </label>
+                <input (change)="onLogoFileChange($event)"
+                       id="logo"
+                       ngModel
+                       name="logo"
+                       type="file"
+                       accept=".jpg, .jpeg, .png, .gif, .svg, .webp, .Jpg, .ico">
+              </div>
+            </div>
+            <div class="col-md-4 col-lg-3 form-group">
+              <label for="appIcon"
+                     class="control-label">
+                {{app.Localize("App Icon")}}
+              </label>
+              <div class="image-preview"
+                   style="background-image:url('{{generalSetting.settings.appIcon}}')">
+                <label>
+                  {{app.Localize("Choose File")}}
+                </label>
+                <input (change)="onAppIconFileChange($event)"
+                       id="appIcon"
+                       name="appIcon"
+                       ngModel
+                       type="file"
+                       accept=".jpg, .jpeg, .png, .gif, .svg, .webp, .Jpg, .ico">
+              </div>
+            </div>
+          </div>
+          <!-- Save Changes button -->
+          <div class="mt-2">
+            <button [ngClass]="{'disabled btn-progress' : isGeneralFormSubmitted}"
+                    type="submit"
+                    class="btn btn-primary">
+              <i class="fa fa-floppy-disk me-1"></i>
+              {{app.Localize('Save Changes')}}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- System Setting tab content -->
+  <div [ngClass]="{'d-none' : !tabs.system}">
+    <!-- Card for System Setting -->
+    <div class="card">
+      <div class="card-header">
+        <div class="d-flex align-items-center">
+          <!-- Home link button with tooltip -->
+          <a [routerLink]="['/']"
+             class="home-btn"
+             data-bs-toggle="tooltip"
+             title="Home"></a>
+          <h4 class="title ms-2">
+            {{app.Localize('System Setting')}}
+          </h4>
+        </div>
+      </div>
+      <div *ngIf="isSystemFormLoading"
+           class="p-4">
+        <div class="d-flex justify-content-center">
+          <div class="loader-full"></div>
+        </div>
+      </div>
+      <div *ngIf="!isSystemFormLoading"
+           class="card-body">
+        <!-- System Setting form -->
+        <form #systemForm="ngForm"
+              [ngClass]="{'was-validated' : isSystemFormValidated}"
+              (ngSubmit)="submitSystemForm(systemForm)"
+              class="needs-validation"
+              novalidate>
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <label for="defaultLanguage"
+                     class="control-label">
+                {{app.Localize("Default Language")}}
+                <code>*</code>
+              </label>
+              <!-- Dropdown for selecting the default language -->
+              <ng-select [searchable]="true"
+                         [(ngModel)]="systemSetting.settings.defaultLanguage"
+                         [multiple]="false"
+                         [placeholder]="app.Localize('Choose an option')"
+                         [clearable]="false"
+                         [required]="true"
+                         [ngClass]="{ 'is-invalid': !systemSetting.settings.defaultLanguage && isSystemFormValidated }"
+                         name="defaultLanguage"
+                         id="defaultLanguage"
+                         class="form-control">
+                <ng-option *ngFor="let option of systemSetting.languages | keyvalue"
+                           [value]="option.key">
+                  {{ option.value }}
+                </ng-option>
+              </ng-select>
+              <div *ngIf="!systemSetting.settings.defaultLanguage && isSystemFormValidated"
+                   class="invalid-feedback">
+                {{app.Localize("This field is required.")}}
+              </div>
+            </div>
+            <div class="col-md-6 form-group">
+              <label for="defaultTimezone"
+                     class="control-label">
+                {{app.Localize("Timezone")}}
+                <code>*</code>
+              </label>
+              <!-- Dropdown for selecting the default timezone -->
+              <ng-select [searchable]="true"
+                         [(ngModel)]="systemSetting.settings.defaultTimezone"
+                         [multiple]="false"
+                         [placeholder]="app.Localize('Choose an option')"
+                         [clearable]="false"
+                         [required]="true"
+                         [ngClass]="{ 'is-invalid': !systemSetting.settings.defaultTimezone && isSystemFormValidated }"
+                         name="defaultTimezone"
+                         id="defaultTimezone"
+                         class="form-control">
+                <ng-option *ngFor="let option of systemSetting.timezones | keyvalue"
+                           [value]="option.key">
+                  {{ option.value }}
+                </ng-option>
+              </ng-select>
+              <div *ngIf="!systemSetting.settings.defaultTimezone && isSystemFormValidated"
+                   class="invalid-feedback">
+                {{app.Localize("This field is required.")}}
+              </div>
+            </div>
+            <div class="col-md-6 form-group">
+              <label for="defaultCurrency"
+                     class="control-label">
+                {{app.Localize("Currency")}}
+                <code>*</code>
+              </label>
+              <!-- Dropdown for selecting the default currency -->
+              <ng-select [searchable]="true"
+                         [(ngModel)]="systemSetting.settings.defaultCurrency"
+                         [multiple]="false"
+                         [placeholder]="app.Localize('Choose an option')"
+                         [clearable]="false"
+                         [required]="true"
+                         [ngClass]="{ 'is-invalid': !systemSetting.settings.defaultCurrency && isSystemFormValidated }"
+                         name="defaultCurrency"
+                         id="defaultCurrency"
+                         class="form-control">
+                <ng-option *ngFor="let option of systemSetting.currencies | keyvalue"
+                           [value]="option.key">
+                  {{ option.value }}
+                </ng-option>
+              </ng-select>
+              <div *ngIf="!systemSetting.settings.defaultCurrency && isSystemFormValidated"
+                   class="invalid-feedback">
+                {{app.Localize("This field is required.")}}
+              </div>
+            </div>
+          </div>
+          <div class="mt-2">
+            <!-- Save Changes button -->
+            <button [ngClass]="{'disabled btn-progress' : isSystemFormSubmitted}"
+                    type="submit"
+                    class="btn btn-primary">
+              <i class="fa fa-floppy-disk me-1"></i>
+              {{app.Localize('Save Changes')}}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- Email Setting tab content -->
+  <div [ngClass]="{'d-none' : !tabs.email}">
+    <!-- Card for Email Setting -->
+    <div class="card">
+      <div class="card-header">
+        <div class="d-flex align-items-center">
+          <!-- Home link button with tooltip -->
+          <a [routerLink]="['/']"
+             class="home-btn"
+             data-bs-toggle="tooltip"
+             title="Home"></a>
+          <h4 class="title ms-2">
+            {{app.Localize('Email Setting')}}
+          </h4>
+        </div>
+      </div>
+      <!-- Loading spinner while email form is loading -->
+      <div *ngIf="isEmailFormLoading"
+           class="p-4">
+        <div class="d-flex justify-content-center">
+          <div class="loader-full"></div>
+        </div>
+      </div>
+      <!-- Email Setting form -->
+      <div *ngIf="!isEmailFormLoading"
+           class="card-body">
+        <form #emailForm="ngForm"
+              [ngClass]="{'was-validated' : isEmailFormValidated}"
+              (ngSubmit)="submitEmailForm(emailForm)"
+              class="needs-validation"
+              novalidate>
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <label for="mailProtocol"
+                     class="control-label">
+                {{app.Localize("Mail Protocol")}}
+                <code>*</code>
+              </label>
+              <!-- Dropdown for selecting the mail protocol -->
+              <ng-select [searchable]="true"
+                         [(ngModel)]="emailSetting.settings.mailProtocol"
+                         [multiple]="false"
+                         [placeholder]="app.Localize('Choose an option')"
+                         [clearable]="false"
+                         [required]="true"
+                         [ngClass]="{ 'is-invalid': !emailSetting.settings.mailProtocol && isEmailFormValidated }"
+                         name="mailProtocol"
+                         id="mailProtocol"
+                         class="form-control">
+                <ng-option [value]="'SMTP'">SMTP</ng-option>
+                <ng-option [value]="'Mail'">Mail</ng-option>
+              </ng-select>
+              <div *ngIf="!emailSetting.settings.mailProtocol && isEmailFormValidated"
+                   class="invalid-feedback">
+                {{app.Localize("This field is required.")}}
+              </div>
+            </div>
+            <div class="col-md-6 form-group">
+              <label for="mailEncryption"
+                     class="control-label">
+                {{app.Localize("Mail Encryption")}}
+                <code>*</code>
+              </label>
+              <!-- Dropdown for selecting the mail encryption -->
+              <ng-select [searchable]="true"
+                         [(ngModel)]="emailSetting.settings.mailEncryption"
+                         [multiple]="false"
+                         [placeholder]="app.Localize('Choose an option')"
+                         [clearable]="false"
+                         [required]="true"
+                         [ngClass]="{ 'is-invalid': !emailSetting.settings.mailEncryption && isEmailFormValidated }"
+                         name="mailEncryption"
+                         id="mailEncryption"
+                         class="form-control">
+                <ng-option [value]="'SSL'">SSL</ng-option>
+                <ng-option [value]="'TLS'">TLS</ng-option>
+              </ng-select>
+              <div *ngIf="!emailSetting.settings.mailEncryption && isEmailFormValidated"
+                   class="invalid-feedback">
+                {{app.Localize("This field is required.")}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <label for="mailHost"
+                     class="control-label">
+                {{app.Localize("Mail Host")}}
+                <code>*</code>
+              </label>
+              <!-- Input field for entering the mail host -->
+              <input [(ngModel)]="emailSetting.settings.mailHost"
+                     id="mailHost"
+                     name="mailHost"
+                     type="text"
+                     class="form-control"
+                     maxlength="100"
+                     required>
+              <div class="invalid-feedback">
+                {{app.Localize('This field is required.')}}
+              </div>
+            </div>
+            <div class="col-md-6 form-group">
+              <label for="mailPort"
+                     class="control-label">
+                {{app.Localize("Mail Port")}}
+                <code>*</code>
+              </label>
+              <!-- Input field for entering the mail port -->
+              <input [(ngModel)]="emailSetting.settings.mailPort"
+                     id="mailPort"
+                     name="mailPort"
+                     type="number"
+                     class="form-control"
+                     required>
+              <div class="invalid-feedback">
+                {{app.Localize('This field is required.')}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <label for="mailUserName"
+                     class="control-label">
+                {{app.Localize("Mail Username")}}
+                <code>*</code>
+              </label>
+              <!-- Input field for entering the mail username -->
+              <input [(ngModel)]="emailSetting.settings.mailUserName"
+                     id="mailUserName"
+                     name="mailUserName"
+                     type="text"
+                     class="form-control"
+                     maxlength="100"
+                     required>
+              <div class="invalid-feedback">
+                {{app.Localize('This field is required.')}}
+              </div>
+            </div>
+            <div class="col-md-6 form-group">
+              <label for="mailPassword"
+                     class="control-label">
+                {{app.Localize("Mail Password")}}
+                <code>*</code>
+              </label>
+              <!-- Input field for entering the mail password -->
+              <input [(ngModel)]="emailSetting.settings.mailPassword"
+                     id="mailPassword"
+                     name="mailPassword"
+                     type="text"
+                     class="form-control"
+                     maxlength="100"
+                     required>
+              <div class="invalid-feedback">
+                {{app.Localize('This field is required.')}}
+              </div>
+            </div>
+          </div>
+          <div class="mt-2">
+            <!-- Save Changes button -->
+            <button [ngClass]="{'disabled btn-progress' : isEmailFormSubmitted}"
+                    type="submit"
+                    class="btn btn-primary">
+              <i class="fa fa-floppy-disk me-1"></i>
+              {{app.Localize('Save Changes')}}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- POS Setting tab content -->
+  <div [ngClass]="{'d-none' : !tabs.pos}">
+    <!-- Card for POS Setting -->
+    <div class="card">
+      <div class="card-header">
+        <div class="d-flex align-items-center">
+          <!-- Home link button with tooltip -->
+          <a [routerLink]="['/']"
+             class="home-btn"
+             data-bs-toggle="tooltip"
+             title="Home"></a>
+          <h4 class="title ms-2">
+            {{app.Localize('POS')}}
+          </h4>
+        </div>
+      </div>
+      <!-- Loading spinner while email form is loading -->
+      <div *ngIf="isPOSFormLoading"
+           class="p-4">
+        <div class="d-flex justify-content-center">
+          <div class="loader-full"></div>
+        </div>
+      </div>
+      <!-- POS Setting form -->
+      <div *ngIf="!isPOSFormLoading"
+           class="card-body">
+        <form #invoiceForm="ngForm"
+              [ngClass]="{'was-validated': isPOSFormValidated}"
+              (ngSubmit)="submitPOSForm(invoiceForm)"
+              class="needs-validation"
+              novalidate>
+          <!-- Invoice Type -->
+          <div class="row">
+            <!-- Invoice Template -->
+            <div class="col-md-6 form-group">
+              <label for="invoiceTemplate"
+                     class="control-label">
+                {{app.Localize("Invoice Template")}}
+                <code>*</code>
+              </label>
+              <ng-select [searchable]="true"
+                         [(ngModel)]="posSetting.settings.invoiceTemplate"
+                         [multiple]="false"
+                         [placeholder]="app.Localize('Choose an option')"
+                         [clearable]="false"
+                         [required]="true"
+                         [ngClass]="{ 'is-invalid': !posSetting.settings.invoiceTemplate && isPOSFormValidated }"
+                         name="invoiceTemplate"
+                         id="invoiceTemplate"
+                         class="form-control">
+                <ng-option value="sale_a4">A4</ng-option>
+                <ng-option value="sale_thermal">Thermal</ng-option>
+              </ng-select>
+              <div *ngIf="!posSetting.settings.invoiceTemplate && isPOSFormValidated"
+                   class="invalid-feedback">
+                {{app.Localize("This field is required.")}}
+              </div>
+            </div>
+            <!-- Send Invoice Email -->
+            <div class="col-md-6 form-group">
+              <label for="sendInvoice"
+                     class="control-label">
+                {{app.Localize("Send Invoice Email")}}
+                <code>*</code>
+              </label>
+              <ng-select [searchable]="true"
+                         [(ngModel)]="posSetting.settings.sendInvoice"
+                         [multiple]="false"
+                         [placeholder]="app.Localize('Choose an option')"
+                         [clearable]="false"
+                         [required]="true"
+                         [ngClass]="{ 'is-invalid': !posSetting.settings.sendInvoice && isPOSFormValidated }"
+                         name="sendInvoice"
+                         id="sendInvoice"
+                         class="form-control">
+                <ng-option [value]="true">
+                  {{app.Localize('Yes')}}
+                </ng-option>
+                <ng-option [value]="false">
+                  {{app.Localize('No')}}
+                </ng-option>
+              </ng-select>
+              <div *ngIf="!posSetting.settings.sendInvoice && isPOSFormValidated"
+                   class="invalid-feedback">
+                {{app.Localize("This field is required.")}}
+              </div>
+            </div>
+          </div>
+          <div class="heading-style-two">
+            <h3 class="h-title">
+              {{app.Localize('Customer Loyality')}}
+            </h3>
+          </div>
+          <div class="row">
+            <div class="col-12 form-group">
+              <label for="awardedPointsPerSpent"
+                     class="control-label">
+                {{app.Localize("Reward points are awarded on spent")}} ({{app.FormatCurrency(1)}})
+                <code>*</code>
+              </label>
+              <input [(ngModel)]="posSetting.settings.awardedPointsPerSpent"
+                     id="awardedPointsPerSpent"
+                     name="awardedPointsPerSpent"
+                     type="number"
+                     min="1"
+                     step="1"
+                     onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                     class="form-control"
+                     placeholder="0"
+                     maxlength="20"
+                     required>
+              <div class="invalid-feedback">
+                {{app.Localize("This field is required.")}}
+              </div>
+            </div>
+            <div class="col-12 form-group">
+              <label for="rewardPointsWorth"
+                     class="control-label">
+                {{app.Localize("Each reward point is worth when applied to a purchase")}}
+                <code>*</code>
+              </label>
+              <div class="input-group">
+                <div class="input-group-text">
+                  {{app.GetNumberFormat().symbol}}
+                </div>
+                <input [(ngModel)]="posSetting.settings.rewardPointsWorth"
+                       class="form-control cleave-number"
+                       id="rewardPointsWorth"
+                       name="rewardPointsWorth"
+                       placeholder="{{app.GetNumberFormat().placeholder}}"
+                       maxlength="18"
+                       inputmode="numeric"
+                       autocomplete="off"
+                       required>
+                <div class="invalid-feedback">
+                  {{app.Localize("This field is required.")}}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-2">
+            <!-- Save Changes button -->
+            <button [ngClass]="{'disabled btn-progress': isPOSFormSubmitted}"
+                    type="submit"
+                    class="btn btn-primary">
+              <i class="fa fa-floppy-disk me-1"></i>
+              {{app.Localize('Save Changes')}}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- Theme Setting tab content -->
+  <div [ngClass]="{'d-none' : !tabs.theme}">
+    <!-- Card for Theme Setting -->
+    <div class="card">
+      <div class="card-header">
+        <div class="d-flex align-items-center">
+          <!-- Home link button with tooltip -->
+          <a [routerLink]="['/']"
+             class="home-btn"
+             data-bs-toggle="tooltip"
+             title="Home"></a>
+          <h4 class="title ms-2">
+            {{app.Localize('Theme Setting')}}
+          </h4>
+        </div>
+      </div>
+      <!-- Loading spinner while email form is loading -->
+      <div *ngIf="isThemeFormLoading"
+           class="p-4">
+        <div class="d-flex justify-content-center">
+          <div class="loader-full"></div>
+        </div>
+      </div>
+      <!-- Theme Setting form -->
+      <div *ngIf="!isThemeFormLoading"
+           class="card-body">
+        <form #invoiceForm="ngForm"
+              [ngClass]="{'was-validated': isThemeFormValidated}"
+              (ngSubmit)="submitThemeForm(invoiceForm)"
+              class="needs-validation"
+              novalidate>
+          <div class="theme-customizer">
+            <div class="layouts mb-3">
+              <div class="heading-style-two">
+                <h3 class="h-title">
+                  {{app.Localize('Layout')}}
+                </h3>
+              </div>
+              <div class="form-check item">
+                <input [(ngModel)]="themeSetting.settings.themeLayout"
+                       class="form-check-input me-1"
+                       type="radio"
+                       value="drawer-layout"
+                       name="themeLayout"
+                       id="drawerLayout">
+                <label class="m-0"
+                       for="drawerLayout">
+                  <img src="/assets/images/layouts/drawer.svg"
+                       alt="Drawer Layout">
+                  <p>
+                    {{app.Localize('Drawer Layout')}}
+                  </p>
+                </label>
+              </div>
+              <div class="form-check item">
+                <input [(ngModel)]="themeSetting.settings.themeLayout"
+                       class="form-check-input me-1"
+                       type="radio"
+                       value="sidebar-layout"
+                       name="themeLayout"
+                       id="sidebarLayout">
+                <label class="m-0"
+                       for="sidebarLayout">
+                  <img src="/assets/images/layouts/sidebar.svg"
+                       alt="Drawer Layout">
+                  <p>
+                    {{app.Localize('Sidebar Layout')}}
+                  </p>
+                </label>
+              </div>
+            </div>
+            <div class="ui-colors mb-3">
+              <div class="heading-style-two">
+                <h3 class="h-title">
+                  {{app.Localize('Theme Color')}}
+                </h3>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeColor"
+                       type="radio"
+                       name="themeColor"
+                       id="theme-1"
+                       value="theme-1">
+                <label class="indigator theme-1"
+                       for="theme-1"></label>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeColor"
+                       type="radio"
+                       name="themeColor"
+                       id="theme-2"
+                       value="theme-2">
+                <label class="indigator theme-2"
+                       for="theme-2"></label>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeColor"
+                       type="radio"
+                       name="themeColor"
+                       id="theme-3"
+                       value="theme-3">
+                <label class="indigator theme-3"
+                       for="theme-3"></label>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeColor"
+                       type="radio"
+                       name="themeColor"
+                       id="theme-4"
+                       value="theme-4">
+                <label class="indigator theme-4"
+                       for="theme-4"></label>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeColor"
+                       type="radio"
+                       name="themeColor"
+                       id="theme-5"
+                       value="theme-5">
+                <label class="indigator theme-5"
+                       for="theme-5"></label>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeColor"
+                       type="radio"
+                       name="themeColor"
+                       id="theme-6"
+                       value="theme-6">
+                <label class="indigator theme-6"
+                       for="theme-6"></label>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeColor"
+                       type="radio"
+                       name="themeColor"
+                       id="theme-7"
+                       value="theme-7">
+                <label class="indigator theme-7"
+                       for="theme-7"></label>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeColor"
+                       type="radio"
+                       name="themeColor"
+                       id="theme-8"
+                       value="theme-8">
+                <label class="indigator theme-8"
+                       for="theme-8"></label>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeColor"
+                       type="radio"
+                       name="themeColor"
+                       id="theme-9"
+                       value="theme-9">
+                <label class="indigator theme-9"
+                       for="theme-9"></label>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeColor"
+                       type="radio"
+                       name="themeColor"
+                       id="theme-10"
+                       value="theme-10">
+                <label class="indigator theme-10"
+                       for="theme-10"></label>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeColor"
+                       type="radio"
+                       name="themeColor"
+                       id="theme-11"
+                       value="theme-11">
+                <label class="indigator theme-11"
+                       for="theme-11"></label>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeColor"
+                       type="radio"
+                       name="themeColor"
+                       id="theme-12"
+                       value="theme-12">
+                <label class="indigator theme-12"
+                       for="theme-12"></label>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeColor"
+                       type="radio"
+                       name="themeColor"
+                       id="theme-13"
+                       value="theme-13">
+                <label class="indigator theme-13"
+                       for="theme-13"></label>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeColor"
+                       type="radio"
+                       name="themeColor"
+                       id="theme-14"
+                       value="theme-14">
+                <label class="indigator theme-14"
+                       for="theme-14"></label>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeColor"
+                       type="radio"
+                       name="themeColor"
+                       id="theme-15"
+                       value="theme-15">
+                <label class="indigator theme-15"
+                       for="theme-15"></label>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeColor"
+                       type="radio"
+                       name="themeColor"
+                       id="theme-16"
+                       value="theme-16">
+                <label class="indigator theme-16"
+                       for="theme-16"></label>
+              </div>
+              <p class="mb-0">
+                {{app.Localize('Glassmorphism')}}
+              </p>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeColor"
+                       type="radio"
+                       name="themeColor"
+                       id="theme-glass-1"
+                       value="theme-glass-1">
+                <label class="indigator theme-glass-1"
+                       for="theme-glass-1"></label>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeColor"
+                       type="radio"
+                       name="themeColor"
+                       id="theme-glass-2"
+                       value="theme-glass-2">
+                <label class="indigator theme-glass-2"
+                       for="theme-glass-2"></label>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeColor"
+                       type="radio"
+                       name="themeColor"
+                       id="theme-glass-3"
+                       value="theme-glass-3">
+                <label class="indigator theme-glass-3"
+                       for="theme-glass-3"></label>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeColor"
+                       type="radio"
+                       name="themeColor"
+                       id="theme-glass-4"
+                       value="theme-glass-4">
+                <label class="indigator theme-glass-4"
+                       for="theme-glass-4"></label>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeColor"
+                       type="radio"
+                       name="themeColor"
+                       id="theme-glass-5"
+                       value="theme-glass-5">
+                <label class="indigator theme-glass-5"
+                       for="theme-glass-5"></label>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeColor"
+                       type="radio"
+                       name="themeColor"
+                       id="theme-glass-6"
+                       value="theme-glass-6">
+                <label class="indigator theme-glass-6"
+                       for="theme-glass-6"></label>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeColor"
+                       type="radio"
+                       name="themeColor"
+                       id="theme-glass-7"
+                       value="theme-glass-7">
+                <label class="indigator theme-glass-7"
+                       for="theme-glass-7"></label>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeColor"
+                       type="radio"
+                       name="themeColor"
+                       id="theme-glass-8"
+                       value="theme-glass-8">
+                <label class="indigator theme-glass-8"
+                       for="theme-glass-8"></label>
+              </div>
+            </div>
+            <div class="appbar-colors mb-3">
+              <div class="heading-style-two">
+                <h3 class="h-title">
+                  {{app.Localize('AppBar Background')}}
+                </h3>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeAppBar"
+                       type="radio"
+                       name="themeAppBar"
+                       id="appBar-light"
+                       value="light">
+                <label class="indigator light"
+                       for="appBar-light"></label>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeAppBar"
+                       type="radio"
+                       name="themeAppBar"
+                       id="appBar-dark"
+                       value="dark">
+                <label class="indigator dark"
+                       for="appBar-dark"></label>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeAppBar"
+                       type="radio"
+                       name="themeAppBar"
+                       id="appBar-primary"
+                       value="primary">
+                <label class="indigator primary"
+                       for="appBar-primary"></label>
+              </div>
+            </div>
+            <div class="menu-colors mb-3">
+              <div class="heading-style-two">
+                <h3 class="h-title">
+                  {{app.Localize('Menu Background')}}
+                </h3>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeSideBar"
+                       type="radio"
+                       name="themeSideBar"
+                       id="menu-light"
+                       value="light">
+                <label class="indigator light"
+                       for="menu-light"></label>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeSideBar"
+                       type="radio"
+                       name="themeSideBar"
+                       id="menu-dark"
+                       value="dark">
+                <label class="indigator dark"
+                       for="menu-dark"></label>
+              </div>
+              <div class="color">
+                <input [(ngModel)]="themeSetting.settings.themeSideBar"
+                       type="radio"
+                       name="themeSideBar"
+                       id="menu-primary"
+                       value="primary">
+                <label class="indigator primary"
+                       for="menu-primary"></label>
+              </div>
+            </div>
+          </div>
+          <div class="mt-2">
+            <!-- Save Changes button -->
+            <button [ngClass]="{'disabled btn-progress': isThemeFormSubmitted}"
+                    type="submit"
+                    class="btn btn-primary">
+              <i class="fa fa-floppy-disk me-1"></i>
+              {{app.Localize('Save Changes')}}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -6,8 +6,8 @@
     {
         Task<UserInfoWithRoleDto?> GetUserInfoByEmailWithRole(string email);
         Task<bool> IsAuthenticatedExternalUser(UserInfoWithRoleDto userInfo, string password);
-        Task UpdateLoginAttempts(string email, string userName);
-        Task ResetLoginAttemps(string email, string userName);
+        Task UpdateLoginAttempts(string email, Guid userName);
+        Task ResetLoginAttemps(string email, Guid userName);
         void AddRefreshToken(RefreshTokenDto refreshToken);
         Guid UpdateRefreshToken(string token, RefreshTokenDto newToken, string ipAddress);
         Task<UserInfoWithRoleDto?> GetUserInfoByUserId(Guid userId);
@@ -19,14 +19,14 @@
 
         Task AddTwoFactorAuthentication(string email, string encryptedSecret, bool isActive);
 
-        Task UpdateUser(UserInfoDto user, string userName);
+        Task UpdateUser(UserInfoDto user);
 
         Task<PaginatedResult<UserListingDto>> GetAllUser(UserFilterDto filter);
 
-        Task<Guid> CreateUser(CreateUserDto user, string confirmationCode, string modifiedBy);
+        Task<Guid> CreateUser(CreateUserDto user, string confirmationCode, Guid modifiedBy);
 
         Task<bool> UserEmailExists(string email);
-            
+
         Task<PaginatedResult<UserListingDto>> GetUsersByRole(FilterDto filter, string role);
 
 

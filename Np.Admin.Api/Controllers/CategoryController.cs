@@ -20,12 +20,12 @@
         public async Task<IActionResult> CreateCategory(CreateCategoryDto model)
         {
 #if DEBUG
-            var categoryId = await this.categoryService.Add(model, "Sunny");
+            var categoryId = await this.categoryService.Add(model, Guid.NewGuid());
 #else
     base.InitializContext();
             if (base.LoggedInUserInfo == null)
                 return Unauthorized();
-                var categoryId =  await this.categoryService.Add(model, "Sunny");         
+                var categoryId =  await this.categoryService.Add(model,  base.LoggedInUserInfo.UserId);         
 #endif
             return Ok(new { message = $"Category Added successfully {categoryId}." });
         }
@@ -35,12 +35,12 @@
         public async Task<IActionResult> Update(CategoryDto model)
         {
 #if DEBUG
-            await this.categoryService.Update(model, "Sunny");
+            await this.categoryService.Update(model, Guid.NewGuid());
 #else
     base.InitializContext();
             if (base.LoggedInUserInfo == null)
                 return Unauthorized();
-              await this.categoryService.Update(model, "Sunny");         
+              await this.categoryService.Update(model, base.LoggedInUserInfo.UserId);         
 #endif
             return Ok(new { message = $"Category Updated successfully." });
         }

@@ -12,7 +12,7 @@
             Entry = entry;
         }
         public EntityEntry Entry { get; }
-        public string UserGuid { get; set; } = string.Empty;
+        public Guid UserGuid { get; set; } 
         public string TableName { get; set; } = string.Empty;
         public Dictionary<string, object> KeyValues { get; } = new Dictionary<string, object>();
         public Dictionary<string, object> OldValues { get; } = new Dictionary<string, object>();

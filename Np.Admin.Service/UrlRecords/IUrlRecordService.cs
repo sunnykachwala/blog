@@ -4,6 +4,6 @@
     public interface IUrlRecordService
     {
         Task<bool> IsSlugUnique(string slug);
-        Guid AddUrlRecord(CreateUrlReordDto model, string modifiedbBy);
+        Guid AddUrlRecord(CreateUrlReordDto model, Guid modifiedbBy);
     }
 }
