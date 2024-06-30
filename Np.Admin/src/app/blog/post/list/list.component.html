@@ -1,0 +1,37 @@
+<div class="main-content">
+  <div class="page-header">
+    <div class="page-block">
+      <div class="row align-items-center">
+        <div class="col-auto">
+          <!-- Page Title -->
+          <div class="page-header-title">
+            <h4>
+              {{app.Localize('Blog')}}
+            </h4>
+          </div>
+          <!-- Breadcrumbs -->
+          <ul class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a [routerLink]="['/']">
+                <i class="fa fa-home me-1"></i>
+                {{app.Localize('Home')}}
+              </a>
+            </li>
+            <li class="breadcrumb-item">
+              {{app.Localize('Post')}}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Main Card Body -->
+  <div class="card">
+    <div class="card-body" [ngClass]="{'disabled loader-full': isLoading}">
+      <div *ngIf="!isLoading">
+
+      </div>
+    </div>
+  </div>
+</div>
+

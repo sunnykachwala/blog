@@ -28,3 +28,8 @@ Np.Admin.Api/obj/Debug/net6.0/Np.Admin.WebApi.csproj.AssemblyReference.cache
 .vs/blog/v17/.suo
 /Np.Admin.Api/obj
 /Np.Admin.Api/bin
+/Np.Admin.Api/bin
+/Np.Admin.Api/bin
+/Np.Common/bin
+*.dll
+/Np.Admin.Api/bin

@@ -102,7 +102,7 @@ builder.Services.AddAutoMapper(typeof(MappingProfiles));
 
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo { Title = "E-PV API", Version = "v1" });
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "News Portal API", Version = "v1" });
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "JWT Authentication",

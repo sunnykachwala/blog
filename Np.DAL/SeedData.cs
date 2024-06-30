@@ -143,13 +143,37 @@
                     CreatedBy = applicationId,
                 };
 
-                var blogListRole = new UserPermission()
+                var blogPostRole = new UserPermission()
                 {
                     IsActive = true,
-                    Permission = "  ",
+                    Permission = "Blog.Post",
                     UserPermissionId = Guid.NewGuid(),
                     CreatedBy = applicationId,
                 };
+
+                var blogCategoryRole = new UserPermission()
+                {
+                    IsActive = true,
+                    Permission = "Blog.Category",
+                    UserPermissionId = Guid.NewGuid(),
+                    CreatedBy = applicationId,
+                };
+
+                var blogTagRole = new UserPermission()
+                {
+                    IsActive = true,
+                    Permission = "Blog.Tag",
+                    UserPermissionId = Guid.NewGuid(),
+                    CreatedBy = applicationId,
+                };
+                var blogPageRole = new UserPermission()
+                {
+                    IsActive = true,
+                    Permission = "Blog.Page",
+                    UserPermissionId = Guid.NewGuid(),
+                    CreatedBy = applicationId,
+                };
+
 
                 if (!ctx.UserPermission.Any())
                 {
@@ -161,7 +185,12 @@
                     ctx.UserPermission.Add(appSettingRole);
                     ctx.UserPermission.Add(roles);
                     ctx.UserPermission.Add(templateRole);
-                    ctx.UserPermission.Add(blogListRole);
+
+                    ctx.UserPermission.Add(blogPostRole);
+                    ctx.UserPermission.Add(blogCategoryRole);
+                    ctx.UserPermission.Add(blogTagRole);
+                    ctx.UserPermission.Add(blogPageRole);
+                    
                     ctx.SaveChanges();
                 }
                 #endregion
@@ -216,10 +245,31 @@
                     UserRoleId = roleGuid,
                 };
 
-                var blogListRoleMapping = new RolePermissionMapping()
+                var blogPostRoleMapping = new RolePermissionMapping()
                 {
                     RolePermissionMappingId = Guid.NewGuid(),
-                    UserPermissionId = blogListRole.UserPermissionId,
+                    UserPermissionId = blogPostRole.UserPermissionId,
+                    UserRoleId = roleGuid,
+                };
+
+                var blogCategoryRoleMapping = new RolePermissionMapping()
+                {
+                    RolePermissionMappingId = Guid.NewGuid(),
+                    UserPermissionId = blogCategoryRole.UserPermissionId,
+                    UserRoleId = roleGuid,
+                };
+
+                var blogTagRoleMapping = new RolePermissionMapping()
+                {
+                    RolePermissionMappingId = Guid.NewGuid(),
+                    UserPermissionId = blogTagRole.UserPermissionId,
+                    UserRoleId = roleGuid,
+                };
+
+                var blogPageRoleMapping = new RolePermissionMapping()
+                {
+                    RolePermissionMappingId = Guid.NewGuid(),
+                    UserPermissionId = blogPageRole.UserPermissionId,
                     UserRoleId = roleGuid,
                 };
 
@@ -233,7 +283,11 @@
                     ctx.RolePermissionMapping.Add(appSettingRoleMapping);
                     ctx.RolePermissionMapping.Add(userRoleMapping);
                     ctx.RolePermissionMapping.Add(templateRoleMapping);
-                    ctx.RolePermissionMapping.Add(blogListRoleMapping);
+
+                    ctx.RolePermissionMapping.Add(blogPostRoleMapping);
+                    ctx.RolePermissionMapping.Add(blogCategoryRoleMapping);
+                    ctx.RolePermissionMapping.Add(blogTagRoleMapping);
+                    ctx.RolePermissionMapping.Add(blogPageRoleMapping);
                     ctx.SaveChanges();
                 }
                 #endregion

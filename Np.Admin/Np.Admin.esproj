@@ -12,6 +12,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="src\app\auth\" />
+    <Folder Include="src\app\blog\category\" />
+    <Folder Include="src\app\blog\services\" />
+    <Folder Include="src\app\blog\page\" />
+    <Folder Include="src\app\blog\tag\" />
+    <Folder Include="src\app\blog\post\" />
     <Folder Include="src\app\myaccount\" />
     <Folder Include="src\app\settings\" />
   </ItemGroup>

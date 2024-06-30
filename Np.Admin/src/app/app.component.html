@@ -184,19 +184,46 @@
             {{app.Localize('Blog')}}
           </span>
         </a>
-        <ul class="submenu">
-          <li *ngIf="app.HasPermission('Blog.List')">
+        <ul class="submenu"> 
+          <li *ngIf="app.HasPermission('Blog.Post')">
             <a [routerLinkActive]="'active'"
-               [routerLink]="['/blog/list']">
+               [routerLink]="['/blog/post']">
               <i class="fa fa-cart-plus"></i>
               <span>
                 {{app.Localize('Post')}}
               </span>
             </a>
           </li>
+          <li *ngIf="app.HasPermission('Blog.Category')">
+            <a [routerLinkActive]="'active'"
+               [routerLink]="['/blog/category']">
+              <i class="fa fa-cart-plus"></i>
+              <span>                                                   
+                {{app.Localize('Category')}}
+              </span>
+            </a>
+          </li>
+          <li *ngIf="app.HasPermission('Blog.Tag')">
+            <a [routerLinkActive]="'active'"
+               [routerLink]="['/blog/tag']">
+              <i class="fa fa-cart-plus"></i>
+              <span>
+                {{app.Localize('Tag')}}
+              </span>
+            </a>
+          </li>
+          <li *ngIf="app.HasPermission('Blog.Page')">
+            <a [routerLinkActive]="'active'"
+               [routerLink]="['/blog/page']">
+              <i class="fa fa-cart-plus"></i>
+              <span>
+                {{app.Localize('Page')}}
+              </span>
+            </a>
+          </li>
         </ul>
       </li>
-      <li *ngIf="app.HasSomePermission('Sales')"
+      <li *ngIf="app.HasSomePermission('Page')"
           class="has-submenu">
         <a href="javascript:void(0);">
           <i class="fa fa-cart-shopping"></i>
