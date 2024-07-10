@@ -38,8 +38,8 @@
                 Id = Guid.NewGuid()
             };
 
-            var activityId = this.activityLogService.CreateActivityLog("Url Record Cretaed", ActivityLogType.Create, modifiedBy);
-
+            //var activityId = this.activityLogService.CreateActivityLog("Url Record Cretaed", ActivityLogType.Create, modifiedBy);
+            var activityId = 1;
             urlRecordRepo.Insert(urlRecord);
             urlRecordRepo.SaveAudited(modifiedBy, activityId);
             return urlRecord.Id;

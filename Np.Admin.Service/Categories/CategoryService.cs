@@ -5,6 +5,7 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Caching.Memory;
     using Np.Admin.Service.ActivityLogs;
+    using Np.Admin.Service.ActivityLogs.Model;
     using Np.Admin.Service.UrlRecords;
     using Np.Common;
     using Np.DAL.Domain;
@@ -39,7 +40,6 @@
             if (categoryInfo != null)
                 throw new Exception($"Category with Title {model.Title} already exists!");
 
-            var activityId = this.activityLogService.CreateActivityLog("Create Category", ActivityLogType.Create, modifiedBy);
 
             string slug = model.Slug.ToUrlSlug().ToLower();
             while (!await this.urlRecordService.IsSlugUnique(slug))
@@ -52,6 +52,15 @@
             category.Id = Guid.NewGuid();
             category.CreatedBy = modifiedBy;
             category.Slug = slug;
+
+            var activityId = this.activityLogService.CreateActivityLog(new CreateActivityLogDto()
+            {
+                ActivityLogName = "Create Category",
+                EntityType = EntityTypes.Category,
+                LogType = ActivityLogType.Create,
+                PrimaryKeyValue = categoryInfo.Id.ToString(),
+                AuditLog = new List<CreateAuditLogDto>()
+            }, modifiedBy);
 
             var urlRecord = new CreateUrlReordDto()
             {
@@ -90,8 +99,8 @@
             categoryMapped.CreatedBy = category.CreatedBy;
             categoryMapped.CreatedAt = category.CreatedAt;
             categoryMapped.Slug = category.Slug;
-            var activityId = this.activityLogService.CreateActivityLog("Category Updated ", ActivityLogType.Update, modifiedBy);
-
+            //   var activityId = this.activityLogService.CreateActivityLog("Category Updated ", ActivityLogType.Update, modifiedBy);
+            var activityId = 1;
             this.categoryRepo.Edit(categoryMapped);
             this.categoryRepo.SaveAudited(modifiedBy, activityId);
         }

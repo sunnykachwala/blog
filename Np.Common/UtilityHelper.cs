@@ -4,6 +4,7 @@
     using System.Security.Cryptography;
     using System.Text.RegularExpressions;
     using System.Text;
+    using System.Reflection;
 
     public static class UtilityHelper
     {
@@ -105,6 +106,43 @@
 
             return value;
         }
+        public static List<AuditedDataDto> GetUpdatedPropertiesData<T>(T oldObject, T newObject)
+        {
+            List<string> propertyNames = new List<string>() { "SystemUser", "AppName", "ModifiedAt", "Richmond", "MedicalEvent", "MedicalEventAdditionalData", "EventDetail", "DairyCard" };
 
+            var updatedProperties = new List<AuditedDataDto>();
+            var properties = oldObject.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            foreach (var property in properties)
+            {
+                if (Attribute.IsDefined(property, typeof(IgnoreForAuditAttribute)))
+                {
+                    continue;
+                }
+                var oldValue = property.GetValue(oldObject);
+                var newValue = property.GetValue(newObject);
+
+
+                if (!Equals(oldValue, newValue) && !propertyNames.Contains(property.Name))
+                {
+                    updatedProperties.Add(new AuditedDataDto()
+                    {
+                        Key = property.Name,
+                        OldValue = oldValue != null ? oldValue.ToString() : "",
+                        NewValue = newValue != null ? newValue.ToString() : "",
+                    });
+                }
+            }
+
+            return updatedProperties;
+        }
+
+    }
+    public class AuditedDataDto
+    {
+        public string Key { get; set; }
+
+        public string? OldValue { get; set; }
+        public string? NewValue { get; set; }
     }
 }

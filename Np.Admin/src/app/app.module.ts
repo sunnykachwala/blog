@@ -30,6 +30,8 @@ import { AppSettingComponent } from './settings/appsetting/appsetting.component'
 import { RolesComponent } from './settings/roles/roles.component';
 import { TemplatesComponent } from './settings/templates/templates.component';
 
+import { NgxSummernoteModule } from 'ngx-summernote';
+
 
 //Material
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -59,7 +61,8 @@ registerLocaleData(en);
     NzLayoutModule,
     NzMenuModule,
     NgSelectModule,
-  ],
+    NgxSummernoteModule
+    ],
   providers: [
     { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AuthenticationService] },
     AppService, { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

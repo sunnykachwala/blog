@@ -5,13 +5,14 @@ import { ListComponent } from './post/list/list.component';
 import { CategoryListComponent } from './category/list/list.component';
 import { TagListComponent } from './tag/list/list.component';
 import { PageListComponent } from './page/list/list.component';
+import { PostAddComponent } from './post/add/add.component';
 
 
 
 
 const routes: Routes = [
   { path: 'post', component: ListComponent, canActivate: [AuthGuard], data: { permission: "Blog.Post" } },
-  { path: 'post/add', component: ListComponent, canActivate: [AuthGuard], data: { permission: "Blog.Post" } },
+  { path: 'post/add', component: PostAddComponent, canActivate: [AuthGuard], data: { permission: "Blog.Post" } },
   { path: 'post/edit', component: ListComponent, canActivate: [AuthGuard], data: { permission: "Blog.Post" } },
 
   { path: 'category', component: CategoryListComponent, canActivate: [AuthGuard], data: { permission: "Blog.Category" } },

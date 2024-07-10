@@ -39,9 +39,9 @@
             if (tagInfo != null)
                 throw new Exception($"Tag with Name {model.TagName} already exists!");
 
-            var activityId = this.activityLogService.CreateActivityLog("Tag Created", ActivityLogType.Create, modifiedBy);
-
-            string slug = model.Slug.ToUrlSlug().ToLower();
+            //  var activityId = this.activityLogService.CreateActivityLog("Tag Created", ActivityLogType.Create, modifiedBy);
+            var activityId = 1;
+              string slug = model.Slug.ToUrlSlug().ToLower();
             while (!await this.urlRecordService.IsSlugUnique(slug))
             {
                 string randomCode = UtilityHelper.GenerateRandomCode();
@@ -89,8 +89,8 @@
             tagMapped.CreatedBy = tag.CreatedBy;
             tagMapped.CreatedAt = tag.CreatedAt;
             tagMapped.Slug = tag.Slug;
-            var activityId = this.activityLogService.CreateActivityLog("Tag Updated ", ActivityLogType.Update, modifiedBy);
-
+            //var activityId = this.activityLogService.CreateActivityLog("Tag Updated ", ActivityLogType.Update, modifiedBy);
+            var activityId = 1;
             this.tagRepo.Edit(tagMapped);
             this.tagRepo.SaveAudited(modifiedBy, activityId);
         }

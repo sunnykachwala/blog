@@ -4,18 +4,21 @@ import { BlogRoutingModule } from './blog-routing.module';
 import { NgZorroAntdModule } from '../ng-zorro/ng-zorro-antd.module';
 
 import { ListComponent } from './post/list/list.component';
-import { AddComponent } from './post/add/add.component';
+import { PostAddComponent } from './post/add/add.component';
 import { EditComponent } from './post/edit/edit.component';
 import { CategoryListComponent } from './category/list/list.component';
 import { TagListComponent } from './tag/list/list.component';
 import { PageListComponent } from './page/list/list.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NgxSummernoteModule } from 'ngx-summernote';
+
 
 
 
 @NgModule({
   declarations: [
     ListComponent,
-    AddComponent,
+    PostAddComponent,
     EditComponent,
     CategoryListComponent,
     TagListComponent,
@@ -25,6 +28,8 @@ import { PageListComponent } from './page/list/list.component';
     CommonModule,
     BlogRoutingModule,
     NgZorroAntdModule,
+    ReactiveFormsModule,
+    NgxSummernoteModule
   ],
   exports: [
     ListComponent,

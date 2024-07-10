@@ -1,9 +1,14 @@
-﻿using Np.Common;
-
+﻿
 namespace Np.Admin.Service.ActivityLogs
 {
+    using Np.Admin.Service.ActivityLogs.Model;
+    using Np.Common;
+
     public interface IActivityLogService
     {
-        int CreateActivityLog(string activityLogName, ActivityLogType logType, Guid modifiedBy);
+        Task<List<ActivityLogDto>> GetActivityLogData();
+        Task<List<AuditLogDto>> GetActivityDetail(int activityId);
+        int CreateActivityLog(CreateActivityLogDto activityLog, Guid modifiedBy);
+
     }
 }

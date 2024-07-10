@@ -12,7 +12,6 @@
         [Required]
         public string Content { get; set; }
 
-        public Guid AuthorId { get; set; }
     
         [MaxLength(256)]
         public string? DefaultImage { get; set; }
@@ -20,7 +19,6 @@
         [Required]
         [DisplayName("Is Published")]
         public bool IsPublished { get; set; }
-        public DateTime PublishedDate { get; set; }
 
         public int DispalyOrder { get; set; }
 

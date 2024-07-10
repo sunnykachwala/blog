@@ -27,6 +27,7 @@
 
         public EmailSettings EmailSettings { get; set; }
         public SMTPSettings SMTPSettings { get; set; }
+        public FilePath FilePath { get; set; }
     }
 
     public class JWT
@@ -88,5 +89,11 @@
         public bool EnableSsl { get; set; } = false;
         public string UserName { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
+    }
+
+    public class FilePath
+    {
+        public string PostImage { get; set; } = string.Empty;
+        public string CategoryImage { get; set; } = string.Empty;
     }
 }

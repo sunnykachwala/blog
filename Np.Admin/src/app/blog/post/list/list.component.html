@@ -23,13 +23,46 @@
           </ul>
         </div>
       </div>
+
     </div>
   </div>
   <!-- Main Card Body -->
   <div class="card">
-    <div class="card-body" [ngClass]="{'disabled loader-full': isLoading}">
+    <div class="card-body" [ngClass]="{'disabled loader-full': isLoading} ">
       <div *ngIf="!isLoading">
-
+        <nz-table
+        nzShowSizeChanger
+        [nzData]="listOfPost"
+        [nzFrontPagination]="false"
+        [nzLoading]="loading"
+        [nzTotal]="total"
+        [nzPageSize]="pageSize"
+        [nzPageIndex]="pageIndex"
+        (nzQueryParams)="onQueryParamsChange($event)"
+      >
+        <thead>
+          <tr>
+            <th nzColumnKey="Id" >Id</th>
+            <th nzColumnKey="defaultImage" >Image</th>
+            <th nzColumnKey="title" [nzSortFn]="true">Title</th>     
+            <th nzColumnKey="Author" [nzSortFn]="true">Author</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of listOfPost; let i = index">
+            <td> {{i}}</td>
+            <td>{{ data.defaultImage }}</td>
+            <td>{{ data.title }}</td>
+            <td>{{ data.author }}</td>
+          </tr>
+        </tbody>
+      </nz-table>
+      </div>
+      <div class="row">
+        <div class="header">        
+          <img class="fixed-button" nz-tooltip nzTooltipTitle="Add Post" (click)="addPost()"
+          src="../../../../assets/images/plus.svg" />
+        </div>
       </div>
     </div>
   </div>

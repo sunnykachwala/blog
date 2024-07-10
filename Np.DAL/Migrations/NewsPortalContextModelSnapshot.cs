@@ -48,6 +48,14 @@ namespace Np.DAL.Migrations
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<byte>("EntityType")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("IpAddress")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
                     b.Property<byte>("LogType")
                         .HasColumnType("tinyint");
 
@@ -56,6 +64,10 @@ namespace Np.DAL.Migrations
 
                     b.Property<Guid?>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PrimaryKeyValue")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SystemUser")
                         .IsRequired()
@@ -611,6 +623,60 @@ namespace Np.DAL.Migrations
                     b.HasIndex("ArticleId");
 
                     b.ToTable("ArticleView");
+                });
+
+            modelBuilder.Entity("Np.DAL.Domain.AuditLog", b =>
+                {
+                    b.Property<Guid>("AuditLogGuid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<int>("ActivityLogId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AppName")
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)")
+                        .HasDefaultValueSql("app_name()");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("KeyName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("NewValues")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OldValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SystemUser")
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)")
+                        .HasDefaultValueSql("suser_sname()");
+
+                    b.HasKey("AuditLogGuid");
+
+                    b.HasIndex("ActivityLogId");
+
+                    b.ToTable("AuditLog");
                 });
 
             modelBuilder.Entity("Np.DAL.Domain.AuditRecord", b =>
@@ -1298,6 +1364,17 @@ namespace Np.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Article");
+                });
+
+            modelBuilder.Entity("Np.DAL.Domain.AuditLog", b =>
+                {
+                    b.HasOne("Np.DAL.Domain.ActivityLog", "ActivityLog")
+                        .WithMany()
+                        .HasForeignKey("ActivityLogId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ActivityLog");
                 });
 
             modelBuilder.Entity("Np.DAL.Domain.AuditRecord", b =>

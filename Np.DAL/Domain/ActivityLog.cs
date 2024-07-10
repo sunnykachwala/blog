@@ -16,6 +16,17 @@
         [Required]
         public ActivityLogType LogType { get; set; }
 
+        [Required]
+        public EntityTypes EntityType { get; set; }
+
+        [Required]
+        public string PrimaryKeyValue { get; set; }
+
+        [Required]
+        [MaxLength(128)]
+        public string IpAddress { get; set; }
+
+
         public virtual ICollection<AuditRecord> AuditRecord { get; } = new List<AuditRecord>();
         #region Inherited
         [MaxLength(256)]

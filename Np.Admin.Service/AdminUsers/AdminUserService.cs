@@ -4,6 +4,7 @@
     using Microsoft.AspNetCore.Cryptography.KeyDerivation;
     using Microsoft.EntityFrameworkCore;
     using Np.Admin.Service.ActivityLogs;
+    using Np.Admin.Service.ActivityLogs.Model;
     using Np.Admin.Service.LoginHistory;
     using Np.Common;
     using Np.DAL;
@@ -108,8 +109,16 @@
             var userInfo = await this.userRepo.GetFindByColumnAsync(x => x.UserEmail == email);
             if (userInfo != null)
             {
+                var activityId = this.activityLogService.CreateActivityLog(new CreateActivityLogDto()
+                {
+                    ActivityLogName = "Update Login Attempts",
+                    EntityType = EntityTypes.AdminUsers,
+                    LogType = ActivityLogType.Update,
+                    PrimaryKeyValue = userInfo.UserGuid.ToString(),
+                    AuditLog = new List<CreateAuditLogDto>() { new CreateAuditLogDto() { KeyName = "LoginAttempts", NewValues = (userInfo.LoginAttempts + 1).ToString(), OldValue = userInfo.LoginAttempts.ToString() } }
+                }, userName);
                 userInfo.LoginAttempts += 1;
-                var activityId = this.activityLogService.CreateActivityLog("Update Login Attempts", ActivityLogType.Update, userName);
+
                 userRepo.Edit(userInfo);
                 userRepo.SaveAudited(userName, activityId);
             }
@@ -121,8 +130,8 @@
             if (userInfo != null)
             {
                 userInfo.LoginAttempts = 0;
-                var activityId = this.activityLogService.CreateActivityLog("Reset Login Attemps", ActivityLogType.Update, userName);
-
+               // var activityId = this.activityLogService.CreateActivityLog("Reset Login Attemps", ActivityLogType.Update, userName);
+                var activityId = 1;
                 userRepo.Edit(userInfo);
                 userRepo.SaveAudited(userName, activityId);
                 this.loginHistory.ResetLoginHistory(userInfo.UserGuid, userName);
@@ -244,8 +253,8 @@
 
             var userData = mapper.Map<AdminUser>(user);
             userData.ModifiedBy = user.UserGuid;
-            var activityId = this.activityLogService.CreateActivityLog("Update User", ActivityLogType.Update, user.UserGuid);
-
+            //var activityId = this.activityLogService.CreateActivityLog("Update User", ActivityLogType.Update, user.UserGuid);
+            var activityId = 1;
             this.userRepo.Edit(userData);
             this.userRepo.SaveAudited(user.UserGuid, activityId);
         }
@@ -264,8 +273,8 @@
                 if (userExist)
                     throw new Exception($"User with email {userData.UserEmail} already exists.");
 
-                var activityId = this.activityLogService.CreateActivityLog("Admin User Created", ActivityLogType.Create, modifiedBy);
-
+                //   var activityId = this.activityLogService.CreateActivityLog("Admin User Created", ActivityLogType.Create, modifiedBy);
+                var activityId = 1;
                 var user = mapper.Map<AdminUser>(userData);
                 user.UserGuid = Guid.NewGuid();
                 user.Salt = salt;

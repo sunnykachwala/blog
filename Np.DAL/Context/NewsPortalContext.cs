@@ -52,6 +52,21 @@
 
             #endregion
 
+            #region Audit Log
+            modelBuilder.Entity<AuditLog>()
+            .Property(e => e.AuditLogGuid)
+            .HasDefaultValueSql("NEWID()");
+
+            modelBuilder.Entity<AuditLog>()
+            .Property(e => e.SystemUser)
+            .HasDefaultValueSql("suser_sname()");
+
+            modelBuilder.Entity<AuditLog>()
+            .Property(e => e.AppName)
+            .HasDefaultValueSql("app_name()");
+
+            #endregion
+
             #region Article Category
 
             modelBuilder.Entity<ArticleCategory>()
@@ -373,6 +388,7 @@
         }
         public DbSet<AppSetting> AppSetting { get; set; }
         public DbSet<AuditRecord> AuditRecords { get; set; }
+        public DbSet<AuditLog> AuditLog { get; set; }
         public DbSet<AdminUser> AdminUser { get; set; }
         public DbSet<AdminUserRole> AdminUserRole { get; set; }
         public DbSet<ActivityLog> ActivityLog { get; set; }

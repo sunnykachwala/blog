@@ -4,6 +4,7 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Caching.Memory;
     using Np.Admin.Service.ActivityLogs;
+    using Np.Admin.Service.ActivityLogs.Model;
     using Np.Admin.Service.UrlRecords;
     using Np.Common;
     using Np.DAL.Domain;
@@ -38,7 +39,6 @@
 
         public async Task<Guid> Add(CreateArticleDto model, string ipAddress, Guid modifiedBy)
         {
-            var activityId = this.activityLogService.CreateActivityLog("Create Article", ActivityLogType.Create, modifiedBy);
 
             string slug = model.Slug.ToUrlSlug().ToLower();
             while (!await this.urlRecordService.IsSlugUnique(slug))
@@ -52,6 +52,17 @@
             article.CreatedBy = modifiedBy;
             article.Slug = slug;
             article.IpAddress = ipAddress;
+            if (model.IsPublished)
+                article.PublishedDate = DateTime.UtcNow;
+            var activityId = this.activityLogService.CreateActivityLog(new CreateActivityLogDto()
+            {
+                ActivityLogName = "Create Article",
+                EntityType = EntityTypes.Category,
+                LogType = ActivityLogType.Create,
+                PrimaryKeyValue = article.ArticleId.ToString(),
+                AuditLog = new List<CreateAuditLogDto>()
+            }, modifiedBy);
+
             var urlRecord = new CreateUrlReordDto()
             {
                 EntityId = article.ArticleId,
@@ -90,6 +101,8 @@
                     #endregion
 
                     this.articleRepo.SaveAudited(modifiedBy, activityId);
+                    this.articleCategoryRepo.SaveAudited(modifiedBy, activityId);
+                    this.articleTagRepo.SaveAudited(modifiedBy, activityId);
                     scope.Complete();
                 }
                 catch (Exception ex)
