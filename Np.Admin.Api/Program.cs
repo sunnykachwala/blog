@@ -69,7 +69,7 @@ builder.Services.Configure<AppConfig>(conf => conf.Jwt = appConfig.Jwt);
 builder.Services.Configure<AppConfig>(conf => conf.EmailSettings = appConfig.EmailSettings);
 builder.Services.Configure<AppConfig>(conf => conf.SMTPSettings = appConfig.SMTPSettings);
 builder.Services.Configure<AppConfig>(conf => conf.FilePath = appConfig.FilePath);
-
+builder.Services.AddHttpContextAccessor();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

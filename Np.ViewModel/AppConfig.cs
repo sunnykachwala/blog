@@ -1,6 +1,5 @@
 ﻿namespace Np.ViewModel
 {
-
     public class AppConfig
     {
         public string AdminUrl { get; set; }

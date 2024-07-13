@@ -1,26 +1,29 @@
 ﻿namespace Np.Admin.Service.ActivityLogs
 {
     using AutoMapper;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
     using Np.Admin.Service.ActivityLogs.Model;
     using Np.Common;
     using Np.DAL.Domain;
     using Np.DAL.Repository;
+    using System.Net;
     using System.Reflection;
     using System.Transactions;
     public class ActivityLogService : IActivityLogService
-
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IBaseRepository<ActivityLog> activylogRepo;
         private readonly IBaseRepository<AuditLog> auditLogRepo;
         private readonly IMapper mapper;
         public ActivityLogService(IBaseRepository<ActivityLog> activylogRepo,
             IBaseRepository<AuditLog> auditLogRepo,
-            IMapper mapper)
+            IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             this.activylogRepo = activylogRepo;
             this.auditLogRepo = auditLogRepo;
             this.mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public IQueryable<ActivityLog> GetActivityLog()
@@ -37,7 +40,7 @@
                 {
                     var activity = this.mapper.Map<ActivityLog>(activityLog);
                     activity.ModifiedBy = modifiedBy;
-                    activity.IpAddress = "127.0.0.1";
+                    activity.IpAddress =this.GetUserIpAddress();
                     this.activylogRepo.Insert(activity);
                     this.activylogRepo.Save();
                     foreach (var auditLog in activityLog.AuditLog)
@@ -93,6 +96,35 @@
             return activity;
         }
 
+        public string GetUserIpAddress()
+        {
+            var ipAddressStr = _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
+            // If your application is behind a proxy or a load balancer,
+            // check for the X-Forwarded-For header to get the client's real IP.
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Request.Headers.ContainsKey("X-Forwarded-For"))
+            {
+                ipAddressStr = _httpContextAccessor.HttpContext?.Request.Headers["X-Forwarded-For"];
+                // The X-Forwarded-For header can contain a comma-separated list of IP addresses.
+                // The client's IP address is usually the first one in the list.
+                ipAddressStr = ipAddressStr?.Split(',')[0].Trim();
+            }
+            // allow localhost test to skip token login
+            if (ipAddressStr == "::1")
+            {
+                ipAddressStr = "127.0.0.1:49565";
+            }
+            // remove port number
+            if (!string.IsNullOrWhiteSpace(ipAddressStr) && ipAddressStr.Contains(':'))
+                ipAddressStr = ipAddressStr.Split(':')[0];
+
+            if (!string.IsNullOrWhiteSpace(ipAddressStr))
+            {
+                IPAddress ipAddress = IPAddress.Parse(ipAddressStr);
+                return ipAddress.ToString();
+            }
+            return "127.0.0.1";
+        }
+
         private List<AuditedDataDto> GetUpdatedPropertiesData<T>(T oldObject, T newObject)
         {
             List<string> propertyNames = new List<string>() { "SystemUser", "AppName", "ModifiedAt", "Richmond", "MedicalEvent", "MedicalEventAdditionalData", "EventDetail", "DairyCard" };
@@ -123,5 +155,7 @@
 
             return updatedProperties;
         }
+
+       
     }
 }

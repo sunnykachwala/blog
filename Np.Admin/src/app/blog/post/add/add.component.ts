@@ -51,7 +51,7 @@ export class PostAddComponent  implements OnInit{
  
 
   ngOnInit(): void {
-    setTimeout(() => {  this.app.InitSummernote('.summernote', '') ; }, 2000);   
+    setTimeout(() => {  this.app.InitSummernote('.summernote', '') ; }, 1000);   
   }
   onCancel() {
     // Handle the cancel action here
@@ -118,7 +118,9 @@ export class PostAddComponent  implements OnInit{
           next: (response: any) => {
             this.apiMessage = response.message;
             this.cdr.markForCheck();
-            this.articleForm.reset();
+            setTimeout(() => {  this.app.InitSummernote('.summernote', '') ;this.articleForm.reset(); }, 1000);   
+            
+ 
           },
           error: (error: any) => {
            

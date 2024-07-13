@@ -7,6 +7,7 @@
     using Np.Admin.WebApi.Utilities;
     using Np.ViewModel;
     using Microsoft.Extensions.Options;
+    using Np.Admin.WebApi.Helper;
 
     [Route("api/article")]
     [ApiController]
@@ -24,29 +25,27 @@
         [HttpPost("create")]
         public async Task<IActionResult> CreateArticel([FromForm] CreateArticleWithFileDto model)
         {
-            string ipAddress = CommonHelper.GetIPAddress(HttpContext);
-
-            var file = model.SourceFile;
-
-            if (file.Length <= 0)
+            if (model.SourceFile == null || model.SourceFile.Length <= 0)
                 return BadRequest("Empty file");
 
-            var originalFileName = Path.GetFileName(file.FileName);
-            var extension = Path.GetExtension(file.FileName);
-            //Create a unique file path
-            var uniqueFileName = Path.GetRandomFileName() + extension;
-            var uniqueFilePath = Path.Combine(Directory.GetCurrentDirectory(), @$"{this.appConfig.FilePath.PostImage}", uniqueFileName);
+            // Get the path for saving the uploaded image
+            string path = Path.Combine(Directory.GetCurrentDirectory(), @$"{this.appConfig.FilePath.PostImage}");
 
-            //Save the file to disk
-            using (var stream = System.IO.File.Create(uniqueFilePath))
+            // Upload the image and handle the response
+            var res = await FileManager.UploadImageAsync(model.SourceFile, path);
+
+            // Handle the error case if image upload fails
+            if (res["status"] == "error")
             {
-                await file.CopyToAsync(stream);
+                return BadRequest(new { message = res.GetValueOrDefault("message") });
             }
+
             var modelData = new CreateArticleDto()
             {
                 Content = model.Content,
-                DefaultImage = uniqueFileName,
-                DispalyOrder = model.DispalyOrder,
+                // Set the AvatarUrl property of the user to the uploaded image URL
+                DefaultImage = res.GetValueOrDefault("message"),
+                DispalyOrder = model.DisplayOrder,
                 IsPublished = model.IsPublished,
                 Keywords = model.Keywords,
                 MetaDescription = model.MetaDescription,
@@ -56,18 +55,15 @@
                 Slug = model.Slug,
                 Title = model.Title,
             };
-#if DEBUG
-            var articleId = await this.articleService.Add(modelData, ipAddress, Guid.NewGuid());
 
-#else
-    base.InitializContext();
+            base.InitializContext();
             if (base.LoggedInUserInfo == null)
                 return Unauthorized();
-            var articleId = await this.articleService.Add(modelData, ipAddress, Guid.NewGuid());
-#endif
+
+            var articleId = await this.articleService.Add(modelData, base.LoggedInUserInfo.UserId);
+
             return Ok(new { message = $"Article Added successfully {articleId}." });
         }
-
 
         [AllowAnonymous]
         [HttpGet("get-all")]

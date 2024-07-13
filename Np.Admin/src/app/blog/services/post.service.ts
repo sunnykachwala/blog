@@ -28,9 +28,6 @@ export class PostService {
   }
 
   add(article: any) {
-
-   
-    
     return this.http.post<APIResponse<any>>(`${environment.apiUrl}article/create/`, article, { withCredentials: true })
       .pipe(
         map((response: any) => {
@@ -43,4 +40,5 @@ export class PostService {
         })
       );
   }
+  
 }

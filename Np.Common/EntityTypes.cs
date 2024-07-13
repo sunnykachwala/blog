@@ -14,5 +14,8 @@
 
         [Description("Category")]
         Category = 4,
+
+        [Description("Url Record")]
+        UrlRecord = 5,
     }
 }

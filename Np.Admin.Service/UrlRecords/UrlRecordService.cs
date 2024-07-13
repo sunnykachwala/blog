@@ -2,6 +2,7 @@
 {
     using AutoMapper;
     using Np.Admin.Service.ActivityLogs;
+    using Np.Admin.Service.ActivityLogs.Model;
     using Np.Common;
     using Np.DAL.Domain;
     using Np.DAL.Repository;
@@ -37,9 +38,15 @@
                 IsActive = model.IsActive,
                 Id = Guid.NewGuid()
             };
-
-            //var activityId = this.activityLogService.CreateActivityLog("Url Record Cretaed", ActivityLogType.Create, modifiedBy);
-            var activityId = 1;
+            var activityId = this.activityLogService.CreateActivityLog(new CreateActivityLogDto()
+            {
+                ActivityLogName = "Create Url Record",
+                EntityType = EntityTypes.UrlRecord,
+                LogType = ActivityLogType.Create,
+                PrimaryKeyValue = urlRecord.Id.ToString(),
+                AuditLog = new List<CreateAuditLogDto>()
+            }, modifiedBy);
+           
             urlRecordRepo.Insert(urlRecord);
             urlRecordRepo.SaveAudited(modifiedBy, activityId);
             return urlRecord.Id;

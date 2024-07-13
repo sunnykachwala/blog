@@ -17,6 +17,8 @@ D:\source\repos\gjtales\gjtales\Np.Admin.Service\obj\Debug\net6.0\Np.Admin.Servi
 D:\source\repos\gjtales\gjtales\Np.Admin.Service\obj\Debug\net6.0\refint\Np.Admin.Service.dll
 D:\source\repos\gjtales\gjtales\Np.Admin.Service\obj\Debug\net6.0\Np.Admin.Service.pdb
 D:\source\repos\gjtales\gjtales\Np.Admin.Service\obj\Debug\net6.0\ref\Np.Admin.Service.dll
+D:\source\repos\gjstory\blog\Np.Admin.Service\bin\Debug\net6.0\Select.Html.dep
+D:\source\repos\gjstory\blog\Np.Admin.Service\bin\Debug\net6.0\Select.Tools.dep
 D:\source\repos\gjstory\blog\Np.Admin.Service\bin\Debug\net6.0\Np.Admin.Service.deps.json
 D:\source\repos\gjstory\blog\Np.Admin.Service\bin\Debug\net6.0\Np.Admin.Service.dll
 D:\source\repos\gjstory\blog\Np.Admin.Service\bin\Debug\net6.0\Np.Admin.Service.pdb

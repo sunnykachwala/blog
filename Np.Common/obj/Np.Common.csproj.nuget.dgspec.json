@@ -46,7 +46,7 @@
           "dependencies": {
             "Microsoft.AspNetCore.Cryptography.KeyDerivation": {
               "target": "Package",
-              "version": "[8.0.5, )"
+              "version": "[8.0.0, )"
             }
           },
           "imports": [

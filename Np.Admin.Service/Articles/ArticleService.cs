@@ -37,7 +37,7 @@
             this.activityLogService = activityLogService;
         }
 
-        public async Task<Guid> Add(CreateArticleDto model, string ipAddress, Guid modifiedBy)
+        public async Task<Guid> Add(CreateArticleDto model, Guid modifiedBy)
         {
 
             string slug = model.Slug.ToUrlSlug().ToLower();
@@ -50,8 +50,9 @@
             var article = mapper.Map<Article>(model);
             article.ArticleId = Guid.NewGuid();
             article.CreatedBy = modifiedBy;
+            article.AuthorId = modifiedBy;
             article.Slug = slug;
-            article.IpAddress = ipAddress;
+            article.IpAddress = this.activityLogService.GetUserIpAddress();
             if (model.IsPublished)
                 article.PublishedDate = DateTime.UtcNow;
             var activityId = this.activityLogService.CreateActivityLog(new CreateActivityLogDto()

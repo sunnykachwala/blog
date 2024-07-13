@@ -1,5 +1,6 @@
 ﻿namespace Np.Admin.WebApi.Model
 {
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
@@ -13,14 +14,13 @@
         public string Content { get; set; }
 
 
-        [MaxLength(256)]
         public IFormFile SourceFile { get; set; }
 
         [Required]
         [DisplayName("Is Published")]
         public bool IsPublished { get; set; }
 
-        public int DispalyOrder { get; set; }
+        public int DisplayOrder  { get; set; }
 
         #region Seo
         [StringLength(300)]

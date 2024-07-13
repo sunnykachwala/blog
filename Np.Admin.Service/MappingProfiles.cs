@@ -1,6 +1,7 @@
 ﻿namespace Np.Admin.Service
 {
     using AutoMapper;
+    using Np.Admin.Service.ActivityLogs.Model;
     using Np.DAL.Domain;
     using Np.ViewModel;
 
@@ -8,6 +9,15 @@
     {
         public MappingProfiles()
         {
+            CreateMap<ActivityLog, ActivityLogDto>()
+            .ReverseMap();
+
+            CreateMap<ActivityLog, CreateActivityLogDto>()
+            .ReverseMap();
+            
+            CreateMap<AuditLog, CreateAuditLogDto>()
+            .ReverseMap();
+
             CreateMap<AdminUser, AdminUserDto>()
             .ReverseMap();
 
