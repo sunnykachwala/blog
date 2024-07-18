@@ -1,4 +1,4 @@
-﻿namespace Np.ViewModel
+﻿namespace Np.Admin.Service.Articles.Model
 {
     public class ArticleDto
     {

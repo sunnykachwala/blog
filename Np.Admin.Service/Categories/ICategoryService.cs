@@ -1,5 +1,6 @@
 ﻿namespace Np.Admin.Service.Categories
 {
+    using Np.Admin.Service.Categories.Model;
     using Np.ViewModel;
     public interface ICategoryService
     {

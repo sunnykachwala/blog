@@ -5,6 +5,7 @@
     using Microsoft.Extensions.Caching.Memory;
     using Np.Admin.Service.ActivityLogs;
     using Np.Admin.Service.ActivityLogs.Model;
+    using Np.Admin.Service.Articles.Model;
     using Np.Admin.Service.UrlRecords;
     using Np.Common;
     using Np.DAL.Domain;
@@ -39,7 +40,6 @@
 
         public async Task<Guid> Add(CreateArticleDto model, Guid modifiedBy)
         {
-
             string slug = model.Slug.ToUrlSlug().ToLower();
             while (!await this.urlRecordService.IsSlugUnique(slug))
             {

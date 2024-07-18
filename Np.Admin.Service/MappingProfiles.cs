@@ -2,6 +2,8 @@
 {
     using AutoMapper;
     using Np.Admin.Service.ActivityLogs.Model;
+    using Np.Admin.Service.Articles.Model;
+    using Np.Admin.Service.Categories.Model;
     using Np.DAL.Domain;
     using Np.ViewModel;
 

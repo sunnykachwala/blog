@@ -1,29 +1,24 @@
-﻿namespace Np.ViewModel
+﻿namespace Np.Admin.Service.Articles.Model
 {
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
-    public class CreateCategoryDto
+    public class CreateArticleDto
     {
         [Required]
-        [StringLength(120)]
-        [DisplayName("Title")]
-        public string Title { get; set; } = string.Empty;
+        [MaxLength(512)]
+        public string Title { get; set; }
 
         [Required]
-        [StringLength(300)]
-        [DisplayName("Details")]
-        public string Details { get; set; } = string.Empty;
+        public string Content { get; set; }
 
-        [DisplayName("Category Image")]
-        public string CategoryImage { get; set; } = string.Empty;
-
-        [DisplayName("Parent")]
-        public Guid? ParentCategoryId { get; set; }
+    
+        [MaxLength(256)]
+        public string? DefaultImage { get; set; }
 
         [Required]
-        [DisplayName("Is Active")]
-        public bool IsActive { get; set; }
+        [DisplayName("Is Published")]
+        public bool IsPublished { get; set; }
 
         public int DispalyOrder { get; set; }
 
@@ -45,5 +40,9 @@
         [DisplayName("Slug")]
         public string Slug { get; set; }
         #endregion
+
+        public ICollection<Guid> SelectedCategories { get; set; }
+        public ICollection<Guid> SelectedTags { get; set; }
+
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Np.Admin.Service.Articles
 {
-    using Np.ViewModel;
+    using Np.Admin.Service.Articles.Model;
     public interface IArticleService
     {
         Task<Guid> Add(CreateArticleDto model,  Guid modifiedBy);

@@ -129,8 +129,7 @@ export class PostAddComponent  implements OnInit{
         .add(() => {
           
         });
-      console.log('Form Submitted!', this.articleForm.value);
-      // You can handle the form submission here
+
     }
   }
   beforeUpload = (file: NzUploadFile): boolean => {

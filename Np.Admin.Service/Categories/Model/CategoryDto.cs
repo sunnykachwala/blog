@@ -1,4 +1,4 @@
-﻿namespace Np.ViewModel
+﻿namespace Np.Admin.Service.Categories.Model
 {
     public class CategoryDto
     {
@@ -14,7 +14,7 @@
 
         public bool IsActive { get; set; }
 
-        public int DispalyOrder { get; set; }
+        public int DisplayOrder { get; set; }
 
         #region Seo
         public string? Keywords { get; set; }

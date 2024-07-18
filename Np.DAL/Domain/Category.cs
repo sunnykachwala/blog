@@ -30,11 +30,11 @@
         [DisplayName("Is Active")]
         public bool IsActive { get; set; }
 
-        public int DispalyOrder { get; set; }
+        public int DisplayOrder { get; set; }
 
-        public virtual ICollection<Category> Subcategories { get; set; } = new List<Category>();
+        public virtual ICollection<Category>? Subcategories { get; set; } = new List<Category>();
 
-        public ICollection<ArticleCategory> ArticleCategories { get; set; }
+        public virtual ICollection<ArticleCategory> ArticleCategories { get; set; }
 
 
         #region Seo
@@ -65,10 +65,10 @@
         public string AppName { get; set; } = string.Empty;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-public Guid CreatedBy { get; set; }
+        public Guid CreatedBy { get; set; }
 
         public DateTime? ModifiedAt { get; set; } = DateTime.UtcNow;
-public Guid? ModifiedBy { get; set; }
+        public Guid? ModifiedBy { get; set; }
         #endregion
     }
 }

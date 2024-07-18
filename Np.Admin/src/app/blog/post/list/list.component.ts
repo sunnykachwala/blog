@@ -11,8 +11,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 })
 
-
-export class ListComponent implements OnInit {
+export class PostListComponent implements OnInit {
   studyData: any[] = [];
   searchData: any | null = null;
   currentPage = 1;

@@ -2,12 +2,12 @@
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using Np.Admin.Service.Articles;
-    using Np.Admin.WebApi.Model;
-    using Np.Admin.WebApi.Utilities;
-    using Np.ViewModel;
     using Microsoft.Extensions.Options;
+    using Np.Admin.Service.Articles;
+    using Np.Admin.Service.Articles.Model;
     using Np.Admin.WebApi.Helper;
+    using Np.Admin.WebApi.Model;
+    using Np.ViewModel;
 
     [Route("api/article")]
     [ApiController]
@@ -43,7 +43,6 @@
             var modelData = new CreateArticleDto()
             {
                 Content = model.Content,
-                // Set the AvatarUrl property of the user to the uploaded image URL
                 DefaultImage = res.GetValueOrDefault("message"),
                 DispalyOrder = model.DisplayOrder,
                 IsPublished = model.IsPublished,
@@ -67,7 +66,7 @@
 
         [AllowAnonymous]
         [HttpGet("get-all")]
-        public async Task<IActionResult> GetAllArticel(ArticleFilterDto model)
+        public async Task<IActionResult> GetAllArticel([FromQuery] ArticleFilterDto model)
         {
 #if DEBUG
             var result = await this.articleService.AllArticle(model);

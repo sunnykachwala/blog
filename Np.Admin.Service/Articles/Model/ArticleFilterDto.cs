@@ -1,5 +1,6 @@
-﻿namespace Np.ViewModel
+﻿namespace Np.Admin.Service.Articles.Model
 {
+    using Np.ViewModel;
     public class ArticleFilterDto : FilterDto
     {
         public List<Guid?> CategoryId { get; set; }

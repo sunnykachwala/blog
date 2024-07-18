@@ -1,11 +1,54 @@
 {
   "Version": 1,
-  "Hash": "rnIy+A2eNAxbazgD1uqdspDVi+TFM1qenKJQ6VsG/B4=",
+  "Hash": "ZpQKRd2FU8vmeru1ldE+AMw8loLp8hGyQEe7DNnVEmc=",
   "Source": "Np.Admin.WebApi",
   "BasePath": "_content/Np.Admin.WebApi",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": []
+  "DiscoveryPatterns": [
+    {
+      "Name": "Np.Admin.WebApi\\wwwroot",
+      "Source": "Np.Admin.WebApi",
+      "ContentRoot": "D:\\source\\repos\\gjstory\\blog\\Np.Admin.Api\\wwwroot\\",
+      "BasePath": "_content/Np.Admin.WebApi",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "D:\\source\\repos\\gjstory\\blog\\Np.Admin.Api\\wwwroot\\category\\images\\83521032-509c-4cc2-9ff3-40d416a4aeaa.png",
+      "SourceId": "Np.Admin.WebApi",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\source\\repos\\gjstory\\blog\\Np.Admin.Api\\wwwroot\\",
+      "BasePath": "_content/Np.Admin.WebApi",
+      "RelativePath": "category/images/83521032-509c-4cc2-9ff3-40d416a4aeaa.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\category\\images\\83521032-509c-4cc2-9ff3-40d416a4aeaa.png"
+    },
+    {
+      "Identity": "D:\\source\\repos\\gjstory\\blog\\Np.Admin.Api\\wwwroot\\category\\images\\ef02c5ae-6ba4-44a0-97f9-4777c064fe9d.png",
+      "SourceId": "Np.Admin.WebApi",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\source\\repos\\gjstory\\blog\\Np.Admin.Api\\wwwroot\\",
+      "BasePath": "_content/Np.Admin.WebApi",
+      "RelativePath": "category/images/ef02c5ae-6ba4-44a0-97f9-4777c064fe9d.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\category\\images\\ef02c5ae-6ba4-44a0-97f9-4777c064fe9d.png"
+    }
+  ]
 }

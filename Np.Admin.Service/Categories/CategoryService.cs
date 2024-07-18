@@ -1,11 +1,11 @@
 ﻿namespace Np.Admin.Service.Categories
 {
     using AutoMapper;
-    using Azure;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Caching.Memory;
     using Np.Admin.Service.ActivityLogs;
     using Np.Admin.Service.ActivityLogs.Model;
+    using Np.Admin.Service.Categories.Model;
     using Np.Admin.Service.UrlRecords;
     using Np.Common;
     using Np.DAL.Domain;
@@ -40,7 +40,6 @@
             if (categoryInfo != null)
                 throw new Exception($"Category with Title {model.Title} already exists!");
 
-
             string slug = model.Slug.ToUrlSlug().ToLower();
             while (!await this.urlRecordService.IsSlugUnique(slug))
             {
@@ -58,7 +57,7 @@
                 ActivityLogName = "Create Category",
                 EntityType = EntityTypes.Category,
                 LogType = ActivityLogType.Create,
-                PrimaryKeyValue = categoryInfo.Id.ToString(),
+                PrimaryKeyValue = category.Id.ToString(),
                 AuditLog = new List<CreateAuditLogDto>()
             }, modifiedBy);
 
@@ -69,6 +68,7 @@
                 IsActive = true,
                 Slug = slug,
             };
+
             using (var scope = new TransactionScope())
             {
                 try
@@ -115,7 +115,7 @@
                 list = await GetCategory()
                     .Where(i => i.IsActive && !i.ParentCategoryId.HasValue
                       && (string.IsNullOrWhiteSpace(filter.Search) || i.Title.Contains(filter.Search)))
-                    .OrderBy(x => x.DispalyOrder)
+                     .OrderBy(x => x.DisplayOrder)
                      .Skip(skip)
                      .Take(filter.PageSize)
                      .ToListAsync();
@@ -141,7 +141,7 @@
                 list = await GetCategory()
                     .Where(i => i.IsActive
                       && (string.IsNullOrWhiteSpace(filter.Search) || i.Title.Contains(filter.Search)))
-                     .OrderBy(x => x.DispalyOrder)
+                     .OrderBy(x => x.DisplayOrder)
                      .Skip(skip)
                      .Take(filter.PageSize)
                      .ToListAsync();
