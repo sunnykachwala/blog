@@ -39,4 +39,16 @@ export class CategoryService {
         })
       );
   }
+  getFullImageUrl(imagePath: string) {
+    // const baseUrl = `${environment.apiUrl}wwwroot/category/images/`; // Replace with your actual base URL
+    // return `${baseUrl}${im*******agePath}`;
+
+    return this.http.get(`${environment.apiUrl}category/view?imageName=${imagePath}`, {
+      responseType: 'blob'
+    }).subscribe();
+  }
+  getFullImageUrlString(imagePath: string): string {
+    const apiBaseUrl = `${environment.apiUrl}wwwroot/category/images/${imagePath}`; // Replace with your actual API base URL
+    return `${apiBaseUrl}${imagePath}`;
+  }
 }

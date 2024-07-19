@@ -105,5 +105,28 @@
             this.categoryService.RemoveCategoryCache();
             return Ok(new { message = $"Category Cache removed successfully." });
         }
+
+        [HttpGet]
+        [Route("view")]
+        public async Task<IActionResult> ViewImage(string imageName)
+        {
+            var file = imageName;
+            var uniqueFilePath = Path.Combine(Directory.GetCurrentDirectory(), @$"{this.appConfig.FilePath.CategoryImage}", file);
+            var stream = new FileStream(uniqueFilePath, FileMode.Open);
+
+            string fileType = "";
+
+            if (file.ToLower().Contains(".pdf"))
+                fileType = "application/pdf";
+
+            if (file.ToLower().Contains(".png"))
+                fileType = "image/png";
+
+            if (file.ToLower().Contains(".jpeg") || file.ToLower().Contains(".jpg"))
+                fileType = "image/jpeg";
+
+            return File(stream, fileType, file);
+        }
+
     }
 }

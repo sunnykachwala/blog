@@ -34,7 +34,6 @@
   <!-- Main Card Body -->
   <div class="card">
     <div class="card-body">
-      <nz-card>
         <form nz-form [formGroup]="articleForm">
           <nz-form-item>
             <nz-form-label [nzSpan]="4" [nzFor]="'title'">Title</nz-form-label>
@@ -87,14 +86,24 @@
             </nz-form-control>
           </nz-form-item>
           <nz-form-item>
-            <nz-form-label [nzSpan]="4" [nzFor]="'selectedCategories'">Select Categories</nz-form-label>
+            <nz-form-label [nzSpan]="4" [nzFor]="'selectedCategories'">Category</nz-form-label>
             <nz-form-control [nzSpan]="8">
 
-              <input nz-input formControlName="selectedCategories" [nzAutocomplete]="autoCategory"
+              <!-- <input nz-input formControlName="selectedCategories" [nzAutocomplete]="autoCategory"
                 id="'selectedCategories'" />
-              <nz-autocomplete [nzDataSource]="categoryOptions" nzBackfill #autoCategory></nz-autocomplete>
+              <nz-autocomplete [nzDataSource]="categoryOptions" nzBackfill #autoCategory></nz-autocomplete> -->
 
-
+              <div class="example-input">
+                <input
+                  formControlName="selectedCategories"
+                  placeholder="search category"
+                  nz-input 
+                  (input)="onInput($event)"
+                  [nzAutocomplete]="autoCategory"
+                  id="'selectedCategories'"
+                />
+                <nz-autocomplete [nzDataSource]="categoryList" nzBackfill #autoCategory></nz-autocomplete>
+              </div>
             </nz-form-control>
           </nz-form-item>
           <nz-form-item>
@@ -104,7 +113,9 @@
               <nz-autocomplete [nzDataSource]="tagOptions" nzBackfill #autoTag></nz-autocomplete>
             </nz-form-control>
           </nz-form-item>
-          <b> SEO Fields: </b>
+          <nz-collapse>
+            <nz-collapse-panel nzHeader="SEO" [nzActive]="true">
+          
           <nz-form-item>
             <nz-form-label [nzSpan]="4" [nzFor]="'keywords'">Keywords</nz-form-label>
             <nz-form-control [nzSpan]="8">
@@ -129,13 +140,14 @@
               <input nz-input formControlName="slug" id="'slug'" />
             </nz-form-control>
           </nz-form-item>
+          </nz-collapse-panel>
+          </nz-collapse>
           <div nz-row style="display: flex;justify-content: end;margin-top: 20px;">
             <button nz-button nzType="default" (click)="onCancel()">Cancel</button>
             <button nz-button nzType="primary" (click)="onSave()">Save</button>
             <!-- <button nz-button nzType="primary" type="submit">Save</button> -->
           </div>
         </form>
-      </nz-card>
     </div>
   </div>
 </div>

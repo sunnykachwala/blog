@@ -68,14 +68,21 @@
         [HttpGet("get-all")]
         public async Task<IActionResult> GetAllArticel([FromQuery] ArticleFilterDto model)
         {
-#if DEBUG
+            //base.InitializContext();
+            //if (base.LoggedInUserInfo == null)
+            //    return Unauthorized();
             var result = await this.articleService.AllArticle(model);
-#else
-    base.InitializContext();
+            return Ok(result);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("get/{id}")]
+        public async Task<IActionResult> GetArticel(Guid id)
+        {
+            base.InitializContext();
             if (base.LoggedInUserInfo == null)
                 return Unauthorized();
-                var result = await this.articleService.AllArticle(model);
-#endif
+            var result = await this.articleService.GetById(id);
             return Ok(result);
         }
     }

@@ -1,1 +1,153 @@
-<p>edit works!</p>
+<div class="main-content">
+    <div class="page-header">
+      <div class="page-block">
+        <div class="row align-items-center">
+          <div class="col-auto">
+            <!-- Page Title -->
+            <div class="page-header-title">
+              <h4>
+                {{app.Localize('Blog')}}
+              </h4>
+            </div>
+            <!-- Breadcrumbs -->
+            <ul class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                  <i class="fa fa-home me-1"></i>
+                  {{app.Localize('Home')}}
+                </a>
+              </li>
+              <li class="breadcrumb-item">
+                <a [routerLink]="['/blog/post']">
+                  {{app.Localize('Post')}}
+                </a>
+              </li>
+              <li class="breadcrumb-item">
+                {{app.Localize('Edit Post')}}
+              </li>
+            </ul>
+          </div>
+        </div>
+  
+      </div>
+    </div>
+    <!-- Main Card Body -->
+    <div class="card">
+      <div class="card-body">
+          <form nz-form [formGroup]="articleForm">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="4" [nzFor]="'title'">Title</nz-form-label>
+              <nz-form-control [nzSpan]="8">
+                <input nz-input formControlName="title" id="'title'" />
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSpan]="4" [nzFor]="'content'">Content</nz-form-label>
+              <nz-form-control [nzSpan]="8">
+                <!-- <textarea nz-input formControlName="content" id="'content'" class="summernote bg-white"></textarea> -->
+                <!-- <ngx-summernote [config]="summernoteConfig" formControlName="content"></ngx-summernote> -->
+  
+                <textarea name="content" nz-input formControlName="content" id="'content'"
+                  class="summernote bg-white"></textarea>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSpan]="4" [nzFor]="'defaultImage'">Default Image</nz-form-label>
+              <nz-form-control [nzSpan]="8">
+                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
+                  <button nz-button>
+                    <span nz-icon nzType="upload"></span>
+                    Select File
+                  </button>
+                </nz-upload>
+                <!-- <nz-upload
+                      [nzFileList]="fileList"
+                      [nzShowUploadList]="false"
+                      nzAction="https://jsonplaceholder.typicode.com/posts/"
+                      (nzChange)="handleChange($event)"
+                    >
+                      <button nz-button>
+                        <i nz-icon nzType="upload"></i>
+                        Click to Upload
+                      </button>
+                    </nz-upload> -->
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSpan]="4" [nzFor]="'isPublished'">Published</nz-form-label>
+              <nz-form-control [nzSpan]="8">
+                <nz-switch formControlName="isPublished"></nz-switch>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSpan]="4" [nzFor]="'displayOrder'">Display Order</nz-form-label>
+              <nz-form-control [nzSpan]="8">
+                <input nz-input type="number" formControlName="displayOrder" id="'displayOrder'" />
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSpan]="4" [nzFor]="'selectedCategories'">Category</nz-form-label>
+              <nz-form-control [nzSpan]="8">
+  
+                <!-- <input nz-input formControlName="selectedCategories" [nzAutocomplete]="autoCategory"
+                  id="'selectedCategories'" />
+                <nz-autocomplete [nzDataSource]="categoryOptions" nzBackfill #autoCategory></nz-autocomplete> -->
+  
+                <div class="example-input">
+                  <input
+                    formControlName="selectedCategories"
+                    placeholder="search category"
+                    nz-input 
+                    (input)="onInput($event)"
+                    [nzAutocomplete]="autoCategory"
+                    id="'selectedCategories'"
+                  />
+                  <nz-autocomplete [nzDataSource]="categoryList" nzBackfill #autoCategory></nz-autocomplete>
+                </div>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSpan]="4" [nzFor]="'selectedTags'">Select Tags</nz-form-label>
+              <nz-form-control [nzSpan]="8">
+                <input nz-input formControlName="selectedTags" [nzAutocomplete]="autoTag" id="'selectedTags'" />
+                <nz-autocomplete [nzDataSource]="tagOptions" nzBackfill #autoTag></nz-autocomplete>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-collapse>
+              <nz-collapse-panel nzHeader="SEO" [nzActive]="true">
+            
+            <nz-form-item>
+              <nz-form-label [nzSpan]="4" [nzFor]="'keywords'">Keywords</nz-form-label>
+              <nz-form-control [nzSpan]="8">
+                <input nz-input formControlName="keywords" id="'keywords'" />
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSpan]="4" [nzFor]="'metaDescription'">Meta Description</nz-form-label>
+              <nz-form-control [nzSpan]="8">
+                <textarea nz-input formControlName="metaDescription" id="'metaDescription'"></textarea>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSpan]="4" [nzFor]="'metaTitle'">Meta Title</nz-form-label>
+              <nz-form-control [nzSpan]="8">
+                <input nz-input formControlName="metaTitle" id="'metaTitle'" />
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSpan]="4" [nzFor]="'slug'">Slug</nz-form-label>
+              <nz-form-control [nzSpan]="8">
+                <input nz-input formControlName="slug" id="'slug'" />
+              </nz-form-control>
+            </nz-form-item>
+            </nz-collapse-panel>
+            </nz-collapse>
+            <div nz-row style="display: flex;justify-content: end;margin-top: 20px;">
+              <button nz-button nzType="default" (click)="onCancel()">Cancel</button>
+              <button nz-button nzType="primary" (click)="onSave()">Save</button>
+              <!-- <button nz-button nzType="primary" type="submit">Save</button> -->
+            </div>
+          </form>
+      </div>
+    </div>
+  </div>

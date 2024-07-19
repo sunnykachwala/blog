@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { PostService } from '@apps/blog/services/post.service';
 import { first } from 'rxjs';
+import { CategoryService } from '@apps/blog/services/category.service';
 
 @Component({
   selector: 'app-add',
@@ -15,6 +16,7 @@ export class PostAddComponent implements OnInit {
   articleForm: FormGroup;
   apiMessage: string = '';
   fileList: NzUploadFile[] = [];
+  categoryList:[] =[];
   summernoteConfig: any = {
     placeholder: 'Write your content here...',
     tabsize: 2,
@@ -29,7 +31,8 @@ export class PostAddComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private postService: PostService,
-    private cdr: ChangeDetectorRef) {
+    private cdr: ChangeDetectorRef,
+    private categoryService: CategoryService) {
 
     this.articleForm = this.fb.group({
       title: ['', [Validators.required]],
@@ -47,16 +50,15 @@ export class PostAddComponent implements OnInit {
     app.InitTooltip();
   }
 
-  // constructor(public app: AppService,   
-  //   private fb: UntypedFormBuilder,
-  //   private router: Router,) {
-  //   app.InitTooltip();
-
-  // }
-
-
   ngOnInit(): void {
     setTimeout(() => { this.app.InitSummernote('.summernote', ''); }, 1000);
+    let filter  = {
+      page :1,
+      pageSize:25,
+      search :'',
+      isActive:true
+    };
+    this.getCategories(filter);
   }
   onCancel() {
     // Handle the cancel action here
@@ -65,12 +67,12 @@ export class PostAddComponent implements OnInit {
   backToListing(e: MouseEvent): void {
     e.preventDefault();
     this.router.navigate(['/blog/post']);
+
   }
   onSave() {
 
     const content = this.app.GetSummernoteCode('.summernote');
-    console.log('content', content);
-
+ 
     if (this.fileList.length > 1) {
       //this.message.error("You can upload one file at a time.");
       return;
@@ -147,5 +149,44 @@ export class PostAddComponent implements OnInit {
     if (info.file.status === 'done') {
       this.articleForm.patchValue({ defaultImage: info.file.response.url });
     }
+  }
+
+  getCategories(filter:any){ 
+    this.categoryService.get(filter)
+    .pipe(first())
+    .subscribe({
+      next: (response: any) => {
+        this.categoryList = response.map((category: any) => {
+          return {
+            value : category.id,
+            label : category.title,
+          };
+        });;
+        this.cdr.markForCheck();
+ 
+      },
+      error: (error: any) => {
+      }
+    })
+    .add(() => {
+      
+    });    
+  }
+
+  onInput(event: Event): void {
+
+    let filter  = {
+      page :1,
+      pageSize:25,
+      search :'',
+      isActive:true
+    };
+    const value = (event.target as HTMLInputElement).value;
+    if(value && value.length >3){
+      filter.search =value;
+      this.getCategories(filter);
+    }
+    console.log(value);
+    //this.categoryList = value ? [value, value + value, value + value + value] : [];
   }
 }

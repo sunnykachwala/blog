@@ -111,8 +111,6 @@ export class AddCategoryComponent implements OnInit {
         this.message.success('Category created successfully!');
         this.categoryForm.reset();
         this.selectedFile = null;
-        
-
       },
       error: (error: any) => {
         this.message.error('Failed to create category!');

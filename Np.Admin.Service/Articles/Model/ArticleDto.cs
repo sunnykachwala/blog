@@ -19,7 +19,7 @@
         public bool IsPublished { get; set; }
         public DateTime PublishedDate { get; set; }
 
-        public int DispalyOrder { get; set; }
+        public int DisplayOrder { get; set; }
 
         #region Seo
      

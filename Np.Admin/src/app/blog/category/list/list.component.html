@@ -32,7 +32,7 @@
         <div *ngIf="!isLoading">
           <nz-table
           nzShowSizeChanger
-          [nzData]="listOfPost"
+          [nzData]="categoryData"
           [nzFrontPagination]="false"
           [nzLoading]="loading"
           [nzTotal]="total"
@@ -45,15 +45,14 @@
               <th nzColumnKey="Id" >Id</th>
               <th nzColumnKey="defaultImage" >Image</th>
               <th nzColumnKey="title" [nzSortFn]="true">Title</th>     
-              <th nzColumnKey="Author" [nzSortFn]="true">Author</th>
+
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let data of listOfPost; let i = index">
-              <td> {{i}}</td>
-              <td>{{ data.defaultImage }}</td>
+            <tr *ngFor="let data of categoryData; let i = index">
+              <td> {{i+1}}</td>
+              <img [src]="data.categoryImage" alt="Category Image" width="100" />
               <td>{{ data.title }}</td>
-              <td>{{ data.author }}</td>
             </tr>
           </tbody>
         </nz-table>

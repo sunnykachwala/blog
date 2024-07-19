@@ -2,7 +2,6 @@
 {
     using AutoMapper;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Caching.Memory;
     using Np.Admin.Service.ActivityLogs;
     using Np.Admin.Service.ActivityLogs.Model;
     using Np.Admin.Service.Articles.Model;
@@ -116,42 +115,31 @@
             return article.ArticleId;
         }
 
-
-        public async Task<List<ArticleDto>?> AllArticle(FilterDto filter)
-        {
-            if (filter.PageSize > 100) filter.PageSize = 100;
-
-            var skip = PageHelper.GetSkipCount(filter.Page, filter.PageSize);
-
-            var list = await GetArticle()
-                   .Where(i => (string.IsNullOrWhiteSpace(filter.Search) || i.Title.Contains(filter.Search)))
-                  .OrderBy(x => x.DispalyOrder)
-                  .Skip(skip)
-                  .Take(filter.PageSize)
-                  .ToListAsync();
-            return list;
-        }
-
         public async Task<List<ArticleDto>?> AllArticle(ArticleFilterDto filter)
         {
             if (filter.PageSize > 100) filter.PageSize = 100;
 
             var skip = PageHelper.GetSkipCount(filter.Page, filter.PageSize);
 
-            var articleIdList = this.articleCategoryRepo.GetAllCustom().Where(x => filter.CategoryId.Count() > 0 && filter.CategoryId.Contains(x.CategoryId)).Select(x => x.ArticleId)
-                .Union(this.articleTagRepo.GetAllCustom().Where(x => filter.TagId.Count() > 0 && filter.TagId.Contains(x.TagId)).Select(x => x.ArticleId)
+            var articleIdList = this.articleCategoryRepo.GetAllCustom().Where(x => filter.CategoryId.HasValue  && filter.CategoryId.Value ==x.CategoryId).Select(x => x.ArticleId)
+                .Union(this.articleTagRepo.GetAllCustom().Where(x => filter.TagId.HasValue && filter.TagId.Value == x.TagId).Select(x => x.ArticleId)
                 ).Distinct().ToList();
 
             var list = await GetArticle()
                    .Where(i => (string.IsNullOrWhiteSpace(filter.Search) || i.Title.Contains(filter.Search)
                    && (!articleIdList.Any() || articleIdList.Contains(i.ArticleId))
-                   && filter.AuthorId.Contains(i.AuthorId)))
+                   && (filter.AuthorId.HasValue && filter.AuthorId.Value == i.AuthorId)))
 
-                  .OrderBy(x => x.DispalyOrder)
+                  .OrderBy(x => x.DisplayOrder)
                   .Skip(skip)
                   .Take(filter.PageSize)
                   .ToListAsync();
             return list;
+        }
+        public async Task<ArticleDto?> GetById(Guid articleId)
+        {
+            var article = await GetArticle().FirstOrDefaultAsync(x => x.ArticleId == articleId);
+            return article;
         }
 
         public async Task<List<ArticleDto>?> AllArticleByCateogryId(FilterDto filter, Guid categoryId)
@@ -162,7 +150,7 @@
 
             var list = await (from a in GetArticle().Where(i => (string.IsNullOrWhiteSpace(filter.Search) || i.Title.Contains(filter.Search)))
                               join ac in this.articleCategoryRepo.GetAllCustom() on a.ArticleId equals ac.ArticleId
-                              orderby a.DispalyOrder
+                              orderby a.DisplayOrder
                               where ac.CategoryId == categoryId && a.IsPublished
                               select new ArticleDto()
                               {
@@ -170,7 +158,7 @@
                                   ArticleId = a.ArticleId,
                                   Content = a.Content,
                                   DefaultImage = a.DefaultImage,
-                                  DispalyOrder = a.DispalyOrder,
+                                  DisplayOrder = a.DisplayOrder,
                                   IsPublished = a.IsPublished,
                                   Keywords = a.Keywords,
                                   MetaDescription = a.MetaDescription,
@@ -194,7 +182,7 @@
 
             var list = await (from a in GetArticle().Where(i => (string.IsNullOrWhiteSpace(filter.Search) || i.Title.Contains(filter.Search)))
                               join ac in this.articleTagRepo.GetAllCustom() on a.ArticleId equals ac.ArticleId
-                              orderby a.DispalyOrder
+                              orderby a.DisplayOrder
                               where ac.TagId == tagId && a.IsPublished
                               select new ArticleDto()
                               {
@@ -202,7 +190,7 @@
                                   ArticleId = a.ArticleId,
                                   Content = a.Content,
                                   DefaultImage = a.DefaultImage,
-                                  DispalyOrder = a.DispalyOrder,
+                                  DisplayOrder = a.DisplayOrder,
                                   IsPublished = a.IsPublished,
                                   Keywords = a.Keywords,
                                   MetaDescription = a.MetaDescription,

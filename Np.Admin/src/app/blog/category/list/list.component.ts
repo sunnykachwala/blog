@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { AppService } from '../../../services/app.service';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { Router, ActivatedRoute } from '@angular/router';
+import { CategoryService } from '@apps/blog/services/category.service';
+import { first } from 'rxjs';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-list',
@@ -10,7 +13,7 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./list.component.css']
 })
 export class CategoryListComponent implements OnInit {
-  studyData: any[] = [];
+  categoryData: any[] = [];
   searchData: any | null = null;
   currentPage = 1;
   serchFilters!: FormGroup;
@@ -31,12 +34,15 @@ export class CategoryListComponent implements OnInit {
     { text: 'female', value: 'female' }
   ];
   constructor(public app: AppService,    private router: Router,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private categoryService: CategoryService,  
+    private cdr: ChangeDetectorRef,
+    private message: NzMessageService,) {
     app.InitTooltip();
   }
 
   ngOnInit(): void {
-    this.loadDataFromServer(this.pageIndex, this.pageSize, null, null, []);
+    this.loadDataFromServer(this.pageIndex, this.pageSize, []);
   }
   onQueryParamsChange(params: NzTableQueryParams): void {
     console.log(params);
@@ -44,14 +50,14 @@ export class CategoryListComponent implements OnInit {
     const currentSort = sort.find(item => item.value !== null);
     const sortField = (currentSort && currentSort.key) || null;
     const sortOrder = (currentSort && currentSort.value) || null;
-    this.loadDataFromServer(pageIndex, pageSize, sortField, sortOrder, filter);
+    this.loadDataFromServer(pageIndex, pageSize, filter);
   }
 
   loadDataFromServer(
     pageIndex: number,
     pageSize: number,
-    sortField: string | null,
-    sortOrder: string | null,
+    // sortField: string | null,
+    // sortOrder: string | null,
     filter: Array<{ key: string; value: string[] }>
   ): void {
     this.loading = true;
@@ -60,9 +66,41 @@ export class CategoryListComponent implements OnInit {
     //   this.total = 200; // mock the total data here
     //   this.listOfRandomUser = data.results;
     // });
+    let filterData  = {
+      page :pageIndex,
+      pageSize:pageSize,
+      search :'',
+      isActive:true
+    };
+    this.getCategories(filterData)
   }
 
   addCategory(){
     this.router.navigate(["/blog/category/add"]);
   }  
-}
+
+  getCategories(filter: any) {
+    this.categoryService.get(filter)
+      .pipe(first())
+      .subscribe({
+        next: (response: any) => {       
+          this.categoryData = response.map((category: any) => {
+            return {
+              ...category,
+              categoryImage: this.categoryService.getFullImageUrlString(category.categoryImage) // Adjust the image URL
+            };
+          });
+          this.cdr.markForCheck();
+          console.log(response);
+        },
+        error: (error: any) => {
+          this.message.error('Failed to retrieve category!');
+        }
+      })
+      .add(() => {
+        this.loading = false;
+      });
+  } 
+  
+  }
+  

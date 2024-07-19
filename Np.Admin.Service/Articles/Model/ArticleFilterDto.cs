@@ -3,8 +3,8 @@
     using Np.ViewModel;
     public class ArticleFilterDto : FilterDto
     {
-        public List<Guid?> CategoryId { get; set; }
-        public List<Guid?> TagId { get; set;}
-        public List<Guid?> AuthorId { get; set; }
+        public Guid? CategoryId { get; set; }
+        public Guid? TagId { get; set;}
+        public Guid? AuthorId { get; set; }
     }
 }

@@ -6,5 +6,6 @@
         Task<Guid> Add(CreateArticleDto model,  Guid modifiedBy);
 
         Task<List<ArticleDto>?> AllArticle(ArticleFilterDto filter);
+        Task<ArticleDto?> GetById(Guid articleId);
     }
 }

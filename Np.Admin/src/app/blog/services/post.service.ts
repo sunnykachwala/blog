@@ -27,6 +27,21 @@ export class PostService {
       );
   }
 
+  getById(id: any) {
+    return this.http.get<APIResponse<any>>(`${environment.apiUrl}article/get/${id}`,
+      { withCredentials: true })
+      .pipe(
+        map((response: any) => {
+          if (response.statusCode === 200 && response.data) {
+            return response.data;
+          }
+        }),
+        catchError((error: HttpErrorResponse) => {
+          return throwError(error);
+        })
+      );
+  }
+
   add(article: any) {
     return this.http.post<APIResponse<any>>(`${environment.apiUrl}article/create/`, article, { withCredentials: true })
       .pipe(

@@ -5,7 +5,7 @@ import { NgZorroAntdModule } from '../ng-zorro/ng-zorro-antd.module';
 
 import { PostListComponent } from './post/list/list.component';
 import { PostAddComponent } from './post/add/add.component';
-import { EditComponent } from './post/edit/edit.component';
+import { PostEditComponent } from './post/edit/edit.component';
 
 import { TagListComponent } from './tag/list/list.component';
 import { PageListComponent } from './page/list/list.component';
@@ -22,7 +22,7 @@ import { AddCategoryComponent } from './category/add/add.component';
   declarations: [
     PostListComponent,
     PostAddComponent,
-    EditComponent,
+    PostEditComponent,
 
     TagListComponent,
     PageListComponent,

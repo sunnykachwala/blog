@@ -45,7 +45,26 @@
                     }
                 }
             }
+            if (context.Request.Path == "/api/category/view")
+            {
+                await _next(context);
+                if (!context.Response.ContentType.Contains("application/json; charset=utf-8"))
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        // Set the response body to the memory stream
+                        context.Response.Body = memoryStream;
 
+                        // Do something with the response if needed
+                        // Access or manipulate the response content here before sending it back
+
+                        // Copy the content of the memory stream to the original response body
+                        memoryStream.Seek(0, SeekOrigin.Begin);
+                        await memoryStream.CopyToAsync(originalResponseBody);
+                        return;
+                    }
+                }
+            }
             using var responseBodyStream = new MemoryStream();
             context.Response.Body = responseBodyStream;
             await _next(context);
