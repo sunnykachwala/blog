@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { AppService } from '../../../services/app.service';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -15,8 +15,8 @@ export class PostListComponent implements OnInit {
   studyData: any[] = [];
   searchData: any | null = null;
   currentPage = 1;
-  serchFilters!: FormGroup;
-
+  searchFilters!: FormGroup;
+  authorOptions = [{ value: '', label: 'author 1' }, { value: '', label: 'author 2' }]
   public hasPageRight: boolean = false;
   public hasAddRight: boolean = false;
   public hasEditRight: boolean = false;
@@ -24,17 +24,21 @@ export class PostListComponent implements OnInit {
   public isLoading = false;
 
   total = 1;
-  listOfPost: any[] = [];
+  listOfPost: any[] = [{ defaultImage: 'neww', title: 'neww', author: 'neww' }];
   loading = true;
   pageSize: number = 25;
-  pageIndex :number = 1;
+  pageIndex: number = 1;
   filterGender = [
     { text: 'male', value: 'male' },
     { text: 'female', value: 'female' }
   ];
-  constructor(public app: AppService,    private router: Router,
-    private route: ActivatedRoute) {
+  constructor(public app: AppService, private router: Router,
+    private route: ActivatedRoute, public fb: FormBuilder) {
     app.InitTooltip();
+    this.searchFilters = this.fb.group({
+      searchText: [''],
+      authorSearch: ['']
+    })
   }
 
   ngOnInit(): void {
@@ -56,7 +60,8 @@ export class PostListComponent implements OnInit {
     sortOrder: string | null,
     filter: Array<{ key: string; value: string[] }>
   ): void {
-    this.loading = true;
+    this.loading = false;
+    this.isLoading = false
     // this.randomUserService.getUsers(pageIndex, pageSize, sortField, sortOrder, filter).subscribe(data => {
     //   this.loading = false;
     //   this.total = 200; // mock the total data here
@@ -64,7 +69,7 @@ export class PostListComponent implements OnInit {
     // });
   }
 
-  addPost(){
+  addPost() {
     this.router.navigate(["/blog/post/add"]);
-  }  
+  }
 }
