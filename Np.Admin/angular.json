@@ -27,7 +27,8 @@
             ],
             "styles": [
               "src/assets/css/site.css",
-              "node_modules/summernote/dist/summernote-lite.min.css"
+              "node_modules/summernote/dist/summernote-lite.min.css",
+              "node_modules/ng-zorro-antd/ng-zorro-antd.min.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
@@ -108,8 +109,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/assets/css/site.css"
-
+              "src/assets/css/site.css",
+              "node_modules/ng-zorro-antd/ng-zorro-antd.min.css"
             ],
             "scripts": [],
             "karmaConfig": "karma.conf.js"
@@ -117,5 +118,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }
