@@ -76,6 +76,7 @@
                     this.categoryRepo.Insert(category);
                     this.urlRecordService.AddUrlRecord(urlRecord, modifiedBy);
                     this.categoryRepo.SaveAudited(modifiedBy, activityId);
+                    this.RemoveCategoryCache();
                     scope.Complete();
                 }
                 catch (Exception ex)
@@ -95,14 +96,24 @@
             var categoryMapped = this.mapper.Map<Category>(model);
             categoryMapped.ModifiedBy = modifiedBy;
             categoryMapped.ModifiedAt = DateTime.UtcNow;
-
             categoryMapped.CreatedBy = category.CreatedBy;
             categoryMapped.CreatedAt = category.CreatedAt;
             categoryMapped.Slug = category.Slug;
-            //   var activityId = this.activityLogService.CreateActivityLog("Category Updated ", ActivityLogType.Update, modifiedBy);
-            var activityId = 1;
+          
+            var updatedProperties = UtilityHelper.GetUpdatedPropertiesData(category, categoryMapped);
+
+            var activityId = this.activityLogService.CreateActivityLog(new CreateActivityLogDto()
+            {
+                ActivityLogName = "Update Category",
+                EntityType = EntityTypes.Category,
+                LogType = ActivityLogType.Update,
+                PrimaryKeyValue = category.Id.ToString(),
+                AuditLog = updatedProperties.Select(x => new CreateAuditLogDto() { KeyName = x.Key, NewValues = x.NewValue, OldValue = x.OldValue }).ToList()
+            }, modifiedBy);
+
             this.categoryRepo.Edit(categoryMapped);
             this.categoryRepo.SaveAudited(modifiedBy, activityId);
+            this.RemoveCategoryCache();
         }
         public async Task<List<CategoryDto>?> GetAllCachedParentCategory(FilterDto filter)
         {

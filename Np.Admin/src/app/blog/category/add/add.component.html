@@ -65,12 +65,14 @@
             <nz-form-control [nzSpan]="8">
               <div class="example-input">
                 <input
-                  placeholder="input here"
+                  formControlName="parentCategoryId"
+                  placeholder="search category"
                   nz-input 
                   (input)="onInput($event)"
-                  [nzAutocomplete]="auto"
+                  [nzAutocomplete]="autoCategory"
+                  id="'parentCategoryId'"
                 />
-                <nz-autocomplete [nzDataSource]="options" nzBackfill #auto></nz-autocomplete>
+                <nz-autocomplete [nzDataSource]="categoryList" nzBackfill #autoCategory></nz-autocomplete>
               </div>
               <!-- <nz-select formControlName="parentCategoryId" id="parentCategoryId">
                  Add options here 

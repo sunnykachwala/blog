@@ -17,6 +17,7 @@
         private readonly IBaseRepository<Article> articleRepo;
         private readonly IBaseRepository<ArticleCategory> articleCategoryRepo;
         private readonly IBaseRepository<ArticleTag> articleTagRepo;
+        private readonly IBaseRepository<AdminUser> userRepo;
         private readonly IUrlRecordService urlRecordService;
         private readonly IMapper mapper;
         private readonly IActivityLogService activityLogService;
@@ -26,7 +27,8 @@
               IBaseRepository<ArticleTag> articleTagRepo,
               IUrlRecordService urlRecordService,
               IMapper mapper,
-              IActivityLogService activityLogService
+              IActivityLogService activityLogService,
+              IBaseRepository<AdminUser> userRepo
              )
         {
             this.articleRepo = articleRepo;
@@ -35,6 +37,7 @@
             this.urlRecordService = urlRecordService;
             this.mapper = mapper;
             this.activityLogService = activityLogService;
+            this.userRepo = userRepo;
         }
 
         public async Task<Guid> Add(CreateArticleDto model, Guid modifiedBy)
@@ -121,20 +124,90 @@
 
             var skip = PageHelper.GetSkipCount(filter.Page, filter.PageSize);
 
-            var articleIdList = this.articleCategoryRepo.GetAllCustom().Where(x => filter.CategoryId.HasValue  && filter.CategoryId.Value ==x.CategoryId).Select(x => x.ArticleId)
+            var articleIdList = this.articleCategoryRepo.GetAllCustom().Where(x => filter.CategoryId.HasValue && filter.CategoryId.Value == x.CategoryId).Select(x => x.ArticleId)
                 .Union(this.articleTagRepo.GetAllCustom().Where(x => filter.TagId.HasValue && filter.TagId.Value == x.TagId).Select(x => x.ArticleId)
                 ).Distinct().ToList();
 
-            var list = await GetArticle()
-                   .Where(i => (string.IsNullOrWhiteSpace(filter.Search) || i.Title.Contains(filter.Search)
-                   && (!articleIdList.Any() || articleIdList.Contains(i.ArticleId))
-                   && (filter.AuthorId.HasValue && filter.AuthorId.Value == i.AuthorId)))
+            var list = (from a in GetArticle()
+                        join au in this.userRepo.GetAllCustom() on a.AuthorId equals au.UserGuid
+                        where ((string.IsNullOrWhiteSpace(filter.Search) || a.Title.Contains(filter.Search))
+                        || (articleIdList.Contains(a.ArticleId))
+                        || (filter.AuthorId.HasValue && filter.AuthorId.Value == a.AuthorId)
+                       )
+                        select new ArticleDto()
+                        {
+                            ArticleId = a.ArticleId,
+                            AuthorId = a.AuthorId,
+                            AuthorName = au.FirstName,
+                            Content = a.Content,
+                            DefaultImage = a.DefaultImage,
+                            DisplayOrder = a.DisplayOrder,
+                            IpAddress = a.IpAddress,
+                            IsPublished = a.IsPublished,
+                            Keywords = a.Keywords,
+                            MetaDescription = a.MetaDescription,
+                            MetaTitle = a.MetaTitle,
+                            PublishedDate = a.PublishedDate,
+                            Slug = a.Slug,
+                            Title = a.Title,
+                        });
 
-                  .OrderBy(x => x.DisplayOrder)
-                  .Skip(skip)
-                  .Take(filter.PageSize)
-                  .ToListAsync();
-            return list;
+            if (string.IsNullOrWhiteSpace(filter.SortField))
+            {
+                return await list.OrderBy(x => x.DisplayOrder)
+                     .Skip(skip)
+                     .Take(filter.PageSize)
+                     .ToListAsync();
+
+            }
+            else
+            {
+                if (filter.SortField.ToLower().Equals("title"))
+                {
+                    if (!string.IsNullOrWhiteSpace(filter.SortOrder))
+                    {
+                        if (filter.SortOrder.ToLower().Equals("descend"))
+                        {
+                            return await list.OrderByDescending(x => x.Title)
+                                               .Skip(skip)
+                                               .Take(filter.PageSize)
+                                               .ToListAsync();
+                        }
+                        else
+                        {
+                            return await list.OrderBy(x => x.Title)
+                                              .Skip(skip)
+                                              .Take(filter.PageSize)
+                                              .ToListAsync();
+                        }
+                    }
+                    
+                }
+                if (filter.SortField.ToLower().Equals("author"))
+                {
+                    if (!string.IsNullOrWhiteSpace(filter.SortOrder))
+                    {
+                        if (filter.SortOrder.ToLower().Equals("descend"))
+                        {
+                            return await list.OrderByDescending(x => x.AuthorName)
+                                               .Skip(skip)
+                                               .Take(filter.PageSize)
+                                               .ToListAsync();
+                        }
+                        else
+                        {
+                            return await list.OrderBy(x => x.AuthorName)
+                                              .Skip(skip)
+                                              .Take(filter.PageSize)
+                                              .ToListAsync();
+                        }
+                    }                   
+                }
+                return await list.OrderBy(x => x.DisplayOrder)
+                    .Skip(skip)
+                    .Take(filter.PageSize)
+                    .ToListAsync();
+            }           
         }
         public async Task<ArticleDto?> GetById(Guid articleId)
         {

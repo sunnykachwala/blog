@@ -98,8 +98,8 @@ export class PostAddComponent implements OnInit {
       defaultImage: this.fileList[0],
       isPublished: this.articleForm.value.isPublished,
       dispalyOrder: this.articleForm.value.dispalyOrder,
-      selectedCategories: this.articleForm.value.selectedCategories,
-      selectedTags: this.articleForm.value.selectedTags,
+      //selectedCategories: this.articleForm.value.selectedCategories,
+     // selectedTags: this.articleForm.value.selectedTags,
       keywords: this.articleForm.value.keywords,
       metaDescription: this.articleForm.value.metaDescription,
       metaTitle: this.articleForm.value.metaTitle,
@@ -114,8 +114,19 @@ export class PostAddComponent implements OnInit {
       formData.append('content', postData.content);
       formData.append('isPublished', postData.isPublished);
       formData.append('dispalyOrder', postData.dispalyOrder);
-      formData.append('selectedCategories', postData.selectedCategories);
-      formData.append('selectedTags', postData.selectedTags);
+      if(this.articleForm.get('selectedCategories')?.value == null){
+        formData.append('selectedCategories', '');
+      }else{
+        formData.append('selectedCategories', this.articleForm.get('selectedCategories')?.value.value);
+      }
+
+      if(this.articleForm.get('selectedTags')?.value == null){
+        formData.append('selectedTags', '');
+      }else{
+        formData.append('selectedTags', this.articleForm.get('selectedTags')?.value.value);
+      }
+      //formData.append('selectedCategories', postData.selectedCategories);
+      //formData.append('selectedTags', postData.selectedTags);
       formData.append('titkeywordsle', postData.keywords);
       formData.append('metaDescription', postData.metaDescription);
       formData.append('metaTitle', postData.metaTitle);

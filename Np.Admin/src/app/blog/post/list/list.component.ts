@@ -6,6 +6,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { PostService } from '@apps/blog/services/post.service';
 import { first } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { CategoryService } from '@apps/blog/services/category.service';
+import { Articles } from '@apps/types/articel';
 
 @Component({
   selector: 'app-list',
@@ -15,11 +17,12 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 })
 
 export class PostListComponent implements OnInit {
-  studyData: any[] = [];
   searchData: any | null = null;
   currentPage = 1;
   searchFilters!: FormGroup;
   authorOptions = [{ value: '', label: 'author 1' }, { value: '', label: 'author 2' }]
+  categoryList :[] =[];
+  tagOption:[] =[];
   public hasPageRight: boolean = false;
   public hasAddRight: boolean = false;
   public hasEditRight: boolean = false;
@@ -27,7 +30,7 @@ export class PostListComponent implements OnInit {
   public isLoading = false;
 
   total = 1;
-  listOfPost: any[] = [{ defaultImage: 'neww', title: 'neww', author: 'neww' }];
+  listOfPost: Articles[] = [];
   loading = true;
   pageSize: number = 25;
   pageIndex: number = 1;
@@ -39,9 +42,10 @@ export class PostListComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute, 
     public fb: FormBuilder,
-  private articleService:PostService,
+  private articleService:PostService, 
   private cdr: ChangeDetectorRef,
-  private message: NzMessageService,) {
+  private message: NzMessageService,
+  private categoryService: CategoryService) {
     app.InitTooltip();
     this.searchFilters = this.fb.group({
       searchText: [''],
@@ -51,6 +55,13 @@ export class PostListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadDataFromServer(this.pageIndex, this.pageSize, null, null, []);
+   let filter  = {
+    page :1,
+    pageSize:25,
+    search :'',
+    isActive:true
+  };
+  this.getCategories(filter);
   }
   onQueryParamsChange(params: NzTableQueryParams): void {
     console.log(params);
@@ -60,6 +71,7 @@ export class PostListComponent implements OnInit {
     const sortOrder = (currentSort && currentSort.value) || null;
     this.loadDataFromServer(pageIndex, pageSize, sortField, sortOrder, filter);
   }
+
 
   loadDataFromServer(
     pageIndex: number,
@@ -80,7 +92,10 @@ export class PostListComponent implements OnInit {
       page :pageIndex,
       pageSize:pageSize,
       search :'',
-      isActive:true
+      isActive:true,
+      sortField: sortField,
+      sortOrder:sortOrder,
+      filters :filter
     };
     this.getPosts(filterData)
   }
@@ -90,20 +105,45 @@ export class PostListComponent implements OnInit {
   }
 
   getPosts(filter: any) {
+    //this.isLoading=true;
     this.articleService.get(filter)
       .pipe(first())
       .subscribe({
-        next: (response: any) => {       
+        next: (response: any) => {      
          
+         this.listOfPost = response;
           this.cdr.markForCheck();
-          console.log(response);
+          console.log(this.listOfPost );
+          this.isLoading =false;
         },
         error: (error: any) => {
-          this.message.error('Failed to retrieve category!');
+          this.message.error('Failed to retrieve post!');
         }
       })
       .add(() => {
         this.loading = false;
       });
   } 
+
+  getCategories(filter:any){ 
+    this.categoryService.get(filter)
+    .pipe(first())
+    .subscribe({
+      next: (response: any) => {
+        this.categoryList = response.map((category: any) => {
+          return {
+            value : category.id,
+            label : category.title,
+          };
+        });
+        this.cdr.markForCheck();
+ 
+      },
+      error: (error: any) => {
+      }
+    })
+    .add(() => {
+      
+    });    
+  }
 }

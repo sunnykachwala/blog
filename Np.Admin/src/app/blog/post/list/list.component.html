@@ -30,7 +30,7 @@
   <div class="card">
     <div class="card-body" [ngClass]="{'disabled loader-full': isLoading} ">
       <div [formGroup]="searchFilters" nz-row [nzGutter]="16">
-        <div nz-col nzSpan="6">
+        <div nz-col nzSpan="2">
           <nz-form-item>
             <nz-form-label [nzFor]="'searchText'">Search here</nz-form-label>
             <nz-form-control >
@@ -38,13 +38,33 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="6">
+        <div nz-col nzSpan="2">
           <nz-form-item>
-            <nz-form-label [nzFor]="'authorSearch'">Author Search</nz-form-label>
+            <nz-form-label [nzFor]="'authorSearch'">Author</nz-form-label>
             <nz-form-control> 
               <input nz-input  formControlName="authorSearch" 
               [nzAutocomplete]="auto" id="'authorSearch'" />
               <nz-autocomplete  [nzDataSource]="authorOptions" nzBackfill #auto></nz-autocomplete>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="2">
+          <nz-form-item>
+            <nz-form-label [nzFor]="'catgorySearch'">Cateogry</nz-form-label>
+            <nz-form-control> 
+              <input nz-input  formControlName="catgorySearch" 
+              [nzAutocomplete]="catgorySearch" id="'catgorySearch'" />
+              <nz-autocomplete  [nzDataSource]="categoryList" nzBackfill #catgorySearch></nz-autocomplete>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="2">
+          <nz-form-item>
+            <nz-form-label [nzFor]="'tagSearch'">Tag</nz-form-label>
+            <nz-form-control> 
+              <input nz-input  formControlName="tagSearch" 
+              [nzAutocomplete]="tagSearch" id="'tagSearch'" />
+              <nz-autocomplete  [nzDataSource]="tagOption" nzBackfill #tagSearch></nz-autocomplete>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -66,7 +86,7 @@
               <td> {{i}}</td>
               <td>{{ data.defaultImage }}</td>
               <td>{{ data.title }}</td>
-              <td>{{ data.author }}</td>
+              <td>{{ data.authorName }}</td>
             </tr>
           </tbody>
         </nz-table>

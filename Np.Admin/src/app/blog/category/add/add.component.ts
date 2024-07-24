@@ -39,9 +39,16 @@ export class AddCategoryComponent implements OnInit {
       metaTitle: ['', [Validators.maxLength(160)]],
       slug: ['', [Validators.required, Validators.maxLength(160)]]
     });
+    app.InitTooltip();
   }
   ngOnInit(): void {
-   this.getCategories();
+    let filter  = {
+      page :1,
+      pageSize:25,
+      search :'',
+      isActive:true
+    };
+    this.getCategories(filter);
   }
 
   onFileChange(event: any) {
@@ -55,10 +62,11 @@ export class AddCategoryComponent implements OnInit {
       const formData = new FormData();
       formData.append('Title', this.categoryForm.get('title')?.value);
       formData.append('Details', this.categoryForm.get('details')?.value);
+      debugger
       if(this.categoryForm.get('parentCategoryId')?.value == null){
         formData.append('ParentCategoryId', '');
       }else{
-        formData.append('ParentCategoryId', this.categoryForm.get('parentCategoryId')?.value);
+        formData.append('ParentCategoryId', this.categoryForm.get('parentCategoryId')?.value.value);
       }
       formData.append('IsActive', this.categoryForm.get('isActive')?.value);
       formData.append('DisplayOrder', this.categoryForm.get('displayOrder')?.value);
@@ -94,26 +102,21 @@ export class AddCategoryComponent implements OnInit {
     }
   }
 
-  getCategories(){
-    let filter  = {
-      page :1,
-      pageSize:25,
-      search :'',
-      isActive:true
-    };
-
+  getCategories(filter:any){ 
     this.categoryService.get(filter)
     .pipe(first())
     .subscribe({
       next: (response: any) => {
-        this.apiMessage = response.message;
+        this.categoryList = response.map((category: any) => {
+          return {
+            value : category.id,
+            label : category.title,
+          };
+        });;
         this.cdr.markForCheck();
-        this.message.success('Category created successfully!');
-        this.categoryForm.reset();
-        this.selectedFile = null;
+ 
       },
       error: (error: any) => {
-        this.message.error('Failed to create category!');
       }
     })
     .add(() => {
@@ -122,8 +125,19 @@ export class AddCategoryComponent implements OnInit {
   }
 
   onInput(event: Event): void {
+
+    let filter  = {
+      page :1,
+      pageSize:25,
+      search :'',
+      isActive:true
+    };
     const value = (event.target as HTMLInputElement).value;
+    if(value && value.length >3){
+      filter.search =value;
+      this.getCategories(filter);
+    }
     console.log(value);
-    this.options = value ? [value, value + value, value + value + value] : [];
+    //this.categoryList = value ? [value, value + value, value + value + value] : [];
   }
 }

@@ -44,7 +44,6 @@ export class AppService {
     private location: Location,
     private authenticationService: AuthenticationService
   ) {
-    console.log(this.router.config);
     // Decode user data from localStorage
     const decodedUser = localStorage.getItem("news_portal_user")
       ? JSON.parse(localStorage.getItem("news_portal_user") ?? "")

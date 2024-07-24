@@ -13,6 +13,7 @@
         public Guid AuthorId { get; set; }
    
 
+        public string AuthorName { get; set; }
         public string? DefaultImage { get; set; }
 
    

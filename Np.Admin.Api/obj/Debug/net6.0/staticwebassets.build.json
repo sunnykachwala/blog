@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "ZpQKRd2FU8vmeru1ldE+AMw8loLp8hGyQEe7DNnVEmc=",
+  "Hash": "HZuhy+6vdx+Ebo/HKu0xwxQzx3AKKfOOJ2T8nKcBS4w=",
   "Source": "Np.Admin.WebApi",
   "BasePath": "_content/Np.Admin.WebApi",
   "Mode": "Default",
@@ -16,6 +16,57 @@
     }
   ],
   "Assets": [
+    {
+      "Identity": "D:\\source\\repos\\gjstory\\blog\\Np.Admin.Api\\wwwroot\\category\\images\\58a9034f-5e8e-46ea-bf2d-73e78db49302.jpg",
+      "SourceId": "Np.Admin.WebApi",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\source\\repos\\gjstory\\blog\\Np.Admin.Api\\wwwroot\\",
+      "BasePath": "_content/Np.Admin.WebApi",
+      "RelativePath": "category/images/58a9034f-5e8e-46ea-bf2d-73e78db49302.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\category\\images\\58a9034f-5e8e-46ea-bf2d-73e78db49302.jpg"
+    },
+    {
+      "Identity": "D:\\source\\repos\\gjstory\\blog\\Np.Admin.Api\\wwwroot\\category\\images\\5c4b4ea3-46b2-475b-af7a-b992feb63ddb.jpg",
+      "SourceId": "Np.Admin.WebApi",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\source\\repos\\gjstory\\blog\\Np.Admin.Api\\wwwroot\\",
+      "BasePath": "_content/Np.Admin.WebApi",
+      "RelativePath": "category/images/5c4b4ea3-46b2-475b-af7a-b992feb63ddb.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\category\\images\\5c4b4ea3-46b2-475b-af7a-b992feb63ddb.jpg"
+    },
+    {
+      "Identity": "D:\\source\\repos\\gjstory\\blog\\Np.Admin.Api\\wwwroot\\category\\images\\62d4affd-9834-4d98-9dbb-f62abb563095.jpg",
+      "SourceId": "Np.Admin.WebApi",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\source\\repos\\gjstory\\blog\\Np.Admin.Api\\wwwroot\\",
+      "BasePath": "_content/Np.Admin.WebApi",
+      "RelativePath": "category/images/62d4affd-9834-4d98-9dbb-f62abb563095.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\category\\images\\62d4affd-9834-4d98-9dbb-f62abb563095.jpg"
+    },
     {
       "Identity": "D:\\source\\repos\\gjstory\\blog\\Np.Admin.Api\\wwwroot\\category\\images\\83521032-509c-4cc2-9ff3-40d416a4aeaa.png",
       "SourceId": "Np.Admin.WebApi",
@@ -49,6 +100,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\category\\images\\ef02c5ae-6ba4-44a0-97f9-4777c064fe9d.png"
+    },
+    {
+      "Identity": "D:\\source\\repos\\gjstory\\blog\\Np.Admin.Api\\wwwroot\\post\\images\\6197a1fa-f5fc-4d3e-9d35-9c96024086a3.jpg",
+      "SourceId": "Np.Admin.WebApi",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\source\\repos\\gjstory\\blog\\Np.Admin.Api\\wwwroot\\",
+      "BasePath": "_content/Np.Admin.WebApi",
+      "RelativePath": "post/images/6197a1fa-f5fc-4d3e-9d35-9c96024086a3.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\post\\images\\6197a1fa-f5fc-4d3e-9d35-9c96024086a3.jpg"
     }
   ]
 }

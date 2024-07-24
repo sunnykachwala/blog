@@ -44,7 +44,7 @@
             {
                 Content = model.Content,
                 DefaultImage = res.GetValueOrDefault("message"),
-                DispalyOrder = model.DisplayOrder,
+                DisplayOrder = model.DisplayOrder,
                 IsPublished = model.IsPublished,
                 Keywords = model.Keywords,
                 MetaDescription = model.MetaDescription,
